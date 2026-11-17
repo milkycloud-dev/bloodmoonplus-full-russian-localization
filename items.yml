@@ -45,7 +45,7 @@ items:
     material: DIAMOND_SWORD
     name: <red>Кровожадный меч
     lore:
-    - '&7Закален в багровой крови врагов.'
+    - '<gray>Закален в багровой крови врагов.'
     rarity: RARO
     enchants:
       sharpness: 5
@@ -59,7 +59,7 @@ items:
     material: BOW
     name: <red>Багровый лук
     lore:
-    - '&7Стрелы пронзают мглу.'
+    - '<gray>Стрелы пронзают мглу.'
     rarity: RARO
     enchants:
       power: 5
@@ -72,7 +72,7 @@ items:
     material: IRON_SWORD
     name: <dark_gray>Кинжал теней
     lore:
-    - '&7Быстрый и смертоносный удар из темноты.'
+    - '<gray>Быстрый и смертоносный удар из темноты.'
     rarity: RARO
     enchants:
       sharpness: 4
@@ -89,7 +89,7 @@ items:
     material: BOW
     name: <blue>Лук бури
     lore:
-    - '&7Призывает силу грозы.'
+    - '<gray>Призывает силу грозы.'
     rarity: RARO
     enchants:
       power: 5
@@ -103,7 +103,7 @@ items:
     material: DIAMOND_PICKAXE
     name: <aqua>Теневая кирка
     lore:
-    - '&7Дробит породу без лишнего шума.'
+    - '<gray>Дробит породу без лишнего шума.'
     rarity: RARO
     enchants:
       efficiency: 5
@@ -125,7 +125,7 @@ items:
     material: NETHERITE_AXE
     name: <dark_red>Топор палача
     lore:
-    - '&7Тяжелое лезвие, не знающее пощады.'
+    - '<gray>Тяжелое лезвие, не знающее пощады.'
     rarity: EPICO
     enchants:
       sharpness: 6
@@ -139,7 +139,7 @@ items:
     material: NETHERITE_HELMET
     name: <dark_purple>Шлем охотника за кровью
     lore:
-    - '&7Обостряет ночные чувства.'
+    - '<gray>Обостряет ночные чувства.'
     rarity: EPICO
     enchants:
       protection: 5
@@ -162,7 +162,7 @@ items:
     passives:
     - resistance:0
     lore:
-    - '&7Защищает от когтей ночных тварей.'
+    - '<gray>Защищает от когтей ночных тварей.'
   pantalon_cazador:
     material: NETHERITE_LEGGINGS
     name: <dark_purple>Поножи охотника за кровью
@@ -174,7 +174,7 @@ items:
     abilities:
     - DAMAGE_REDUCTION:0.04
     lore:
-    - '&7Легкие и прочные поножи.'
+    - '<gray>Легкие и прочные поножи.'
   botas_cazador:
     material: NETHERITE_BOOTS
     name: <dark_purple>Ботинки охотника за кровью
@@ -187,12 +187,12 @@ items:
     abilities:
     - DAMAGE_REDUCTION:0.03
     lore:
-    - '&7Бесшумная поступь в ночи.'
+    - '<gray>Бесшумная поступь в ночи.'
   espada_ruina:
     material: NETHERITE_SWORD
     name: <light_purple>Меч погибели
     lore:
-    - '&7Оружие древнего воителя.'
+    - '<gray>Оружие древнего воителя.'
     rarity: EPICO
     enchants:
       sharpness: 6
@@ -209,7 +209,7 @@ items:
     material: CROSSBOW
     name: <dark_purple>Арбалет Бездны
     lore:
-    - '&7Выстрел, несущий тьму.'
+    - '<gray>Выстрел, несущий тьму.'
     rarity: EPICO
     enchants:
       multishot: 1
@@ -223,7 +223,7 @@ items:
     material: NETHERITE_BOOTS
     name: <light_purple>Громовые ботинки
     lore:
-    - '&7Сотрясают землю под ногами.'
+    - '<gray>Сотрясают землю под ногами.'
     rarity: EPICO
     enchants:
       protection: 5
@@ -240,7 +240,7 @@ items:
     material: DIAMOND_AXE
     name: <aqua>Топор метели
     lore:
-    - '&7Замораживает раны жертвы.'
+    - '<gray>Замораживает раны жертвы.'
     rarity: EPICO
     enchants:
       sharpness: 5
@@ -254,7 +254,7 @@ items:
     material: NETHERITE_SWORD
     name: <gold><bold>Вампирский клык
     lore:
-    - '&7Вытягивает жизненную силу врага.'
+    - '<gray>Вытягивает жизненную силу врага.'
     rarity: LEGENDARIO
     enchants:
       sharpness: 7
@@ -275,7 +275,7 @@ items:
     material: BOW
     name: <gold><bold>Лунный лук
     lore:
-    - '&7Озарен холодным лунным сиянием.'
+    - '<gray>Озарен холодным лунным сиянием.'
     rarity: LEGENDARIO
     enchants:
       power: 7
@@ -293,7 +293,7 @@ items:
     material: NETHERITE_BOOTS
     name: <gold><bold>Сапоги полуночника
     lore:
-    - '&7Даруют скорость под ночным небом.'
+    - '<gray>Даруют скорость под ночным небом.'
     rarity: LEGENDARIO
     enchants:
       protection: 6
@@ -313,7 +313,7 @@ items:
     material: SHIELD
     name: <gold><bold>Эгида шипов
     lore:
-    - '&7Отражает удары острыми шипами.'
+    - '<gray>Отражает удары острыми шипами.'
     rarity: LEGENDARIO
     enchants:
       unbreaking: 5
@@ -325,7 +325,7 @@ items:
     material: MACE
     name: <gold><bold>Молот грома
     lore:
-    - '&7Громовой раскат в каждом ударе.'
+    - '<gray>Громовой раскат в каждом ударе.'
     rarity: LEGENDARIO
     enchants:
       density: 6
@@ -345,7 +345,7 @@ items:
     material: NETHERITE_CHESTPLATE
     name: <gold><bold>Нагрудник багрового стража
     lore:
-    - '&7Неприступная броня стража.'
+    - '<gray>Неприступная броня стража.'
     rarity: LEGENDARIO
     enchants:
       protection: 6
@@ -363,7 +363,7 @@ items:
     material: CROSSBOW
     name: <gold><bold>Арбалет рассвета
     lore:
-    - '&7Стреляет лучами света.'
+    - '<gray>Стреляет лучами света.'
     rarity: LEGENDARIO
     enchants:
       multishot: 1
@@ -380,7 +380,7 @@ items:
     material: NETHERITE_SWORD
     name: <gradient:#ff0040:#8a00ff><bold>Клинок багрового затмения</bold></gradient>
     lore:
-    - '&7Легендарное оружие затмения.'
+    - '<gray>Легендарное оружие затмения.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -403,7 +403,7 @@ items:
     material: NETHERITE_HELMET
     name: <gradient:#ff0040:#8a00ff><bold>Корона Кровавой Луны</bold></gradient>
     lore:
-    - '&7Венец ночного владыки.'
+    - '<gray>Венец ночного владыки.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -426,7 +426,7 @@ items:
     material: NETHERITE_HOE
     name: <gradient:#ff0040:#8a00ff><bold>Коса жнеца</bold></gradient>
     lore:
-    - '&7Пожинает души заблудших.'
+    - '<gray>Пожинает души заблудших.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -447,7 +447,7 @@ items:
     material: TRIDENT
     name: <gradient:#ff0040:#8a00ff><bold>Трезубец Красной Бездны</bold></gradient>
     lore:
-    - '&7Глубинный ужас морей.'
+    - '<gray>Глубинный ужас морей.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -466,7 +466,7 @@ items:
     material: MACE
     name: <gradient:#ff0040:#8a00ff><bold>Булава колосса</bold></gradient>
     lore:
-    - '&7Сокрушает любую броню.'
+    - '<gray>Сокрушает любую броню.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -485,7 +485,7 @@ items:
     material: NETHERITE_AXE
     name: <gradient:#ff0040:#8a00ff><bold>Топор апокалипсиса</bold></gradient>
     lore:
-    - '&7Орудие конца времен.'
+    - '<gray>Орудие конца времен.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -507,7 +507,7 @@ items:
     material: NETHERITE_CHESTPLATE
     name: <gradient:#ff0040:#8a00ff><bold>Нагрудник багрового затмения</bold></gradient>
     lore:
-    - '&7Броня космической тьмы.'
+    - '<gray>Броня космической тьмы.'
     rarity: MITICO
     limit: 3
     enchants:
@@ -529,7 +529,7 @@ items:
     material: NETHERITE_LEGGINGS
     name: <gradient:#ff0040:#8a00ff><bold>Поножи затмения</bold></gradient>
     lore:
-    - '&7Непоколебимая стойкость.'
+    - '<gray>Непоколебимая стойкость.'
     rarity: MITICO
     limit: 3
     enchants:
