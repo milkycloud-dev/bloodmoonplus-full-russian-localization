@@ -138,6 +138,64 @@ event:
   commands-on-start: []         # consola; {world}
   commands-on-end: []
   survivor-commands: []         # consola, por superviviente; {player}  ej: "eco give {player} 500"
+  start-announcement:
+    # Заголовок титула при старте
+    title: "<dark_red><bold>🌙 КРОВАВАЯ ЛУНА</bold></dark_red>"
+    # Подзаголовок без параметров (когда warning.show-parameters: false)
+    subtitle: "<red>Выживите до рассвета...</red>"
+    # Подзаголовок с параметрами (когда warning.show-parameters: true)
+    subtitle-with-params: "<red>Выживите до рассвета <gray>(x{difficulty})</gray></red>"
+    # Сообщение в чат без параметров
+    chat: "<red><bold>🌙 Кровавая Луна началась!</bold> <gray>Выживите до рассвета...</gray>"
+    # Сообщение в чат с параметрами
+    chat-with-params: "<red><bold>🌙 Кровавая Луна началась!</bold> <gray>Сложность <red>x{difficulty}</red> · Длительность <white>{minutes} мин</white></gray>"
+
+# ------------------------------------------------------------
+#  УСТАНОВКА БЛОКОВ ВО ВРЕМЯ КРОВАВОЙ ЛУНЫ (BLOCK PLACEMENT)
+# ------------------------------------------------------------
+block-placement:
+  # Разрешить ли игрокам ставить блоки во время Кровавой Луны
+  # true = игроки могут свободно строить и ставить блоки
+  # false = установка блоков запрещена (запрещает застраиваться и столбиться от мобов)
+  allow: true
+  # Разрешать ли ставить блоки игрокам в творческом режиме (креатив) и спектаторам
+  exempt-creative: true
+  # Право для обхода запрета строительства
+  bypass-permission: "bloodmoon.bypass.blockplace"
+  # Сообщение при попытке поставить блок (если allow: false)
+  deny-message: "<red>☠ Темная магия Кровавой Луны сковывает землю: строительство запрещено!</red>"
+
+# ------------------------------------------------------------
+#  ПРЕДУПРЕЖДЕНИЯ И ОБРАТНЫЙ ОТСЧЕТ (WARNINGS & COUNTDOWN)
+# ------------------------------------------------------------
+warning:
+  # Отображать ли параметры Кровавой Луны (сложность и длительность) в предупреждениях.
+  # По умолчанию: false (параметры скрыты, чтобы игроки не знали точную сложность заранее).
+  show-parameters: false
+  # Устрашающий звук при предупреждении (entity.wither.ambient, entity.ender_dragon.growl, ambient.cave и т.д.)
+  sound: "entity.wither.ambient"
+  sound-volume: 1.0
+  sound-pitch: 0.6
+
+countdown:
+  # Отображать ли параметры в обратном отсчете (по умолчанию false)
+  show-parameters: false
+  # Устрашающий звук при оповещениях обратного отсчета
+  sound: "entity.ender_dragon.growl"
+  sound-volume: 1.0
+  sound-pitch: 0.6
+  # Секунды, на которых выводятся предупреждения в чат и на экран
+  alert-seconds: [300, 180, 120, 60, 30, 15, 10, 5, 4, 3, 2, 1]
+  # Звук отсчета на последних 5 секундах (5, 4, 3, 2, 1)
+  tick-sound: "block.note_block.basedrum"
+  # Сообщение в чат (без параметров)
+  chat: "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! Приготовьтесь к кошмару!</red>"
+  # Сообщение в чат (с параметрами, если show-parameters: true)
+  chat-with-params: "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! <gray>(Сложность <red>x{difficulty}</red> · Длительность <white>{duration} мин</white>)</gray></red>"
+  # Заголовок на экране
+  title: "<dark_red><bold>КРОВАВАЯ ЛУНА ПРИБЛИЖАЕТСЯ</bold></dark_red>"
+  subtitle: "<red>Начало через {time}...</red>"
+  subtitle-with-params: "<red>Начало через {time}... <gray>(Сложность x{difficulty})</gray></red>"
 
 # ------------------------------------------------------------
 #  ANUNCIOS DE CHAT
