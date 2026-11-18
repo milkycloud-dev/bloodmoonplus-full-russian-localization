@@ -181,10 +181,45 @@ difficulty:
     health: 0.35         # здоровье мобов (+35% за уровень сложности)
     damage: 0.35         # урон мобов (+35% за уровень сложности)
     speed: 0.05          # прирост скорости (ограничен speed-cap)
-    horde-size: 0.0      # множитель размера орды (0.0 = фиксированный размер, не спавнит 3000 мобов)
-    spawn-speed: 0.0     # множитель частоты орды (0.0 = строго постоянный интервал, не ускоряет до 4 сек)
+    horde-size: 0.15     # прирост размера орды (до x5)
+    horde-size-max-difficulty: 5.0 # кап масштабирования размера орды (выше x5 не растет)
+    spawn-speed: 0.15    # прирост частоты волн орды (до x5)
+    spawn-speed-max-difficulty: 5.0 # кап частоты волн орды (не ускоряется выше x5)
     loot-chance: 0.35    # шанс выпадения лута
     rarity-luck: 0.6     # удача для редких категорий лута
+  epic-effects:
+    enabled: true
+    min-difficulty: 3.0   # активация эпичных эффектов на сложностях от x3
+    lightning:
+      enabled: true
+      interval-seconds: 18
+      chance-per-interval: 0.45
+    particles:
+      ambient-blood-spores: true
+    fireworks:
+      enabled: true
+      interval-seconds: 12
+      launch-at-player-chance: 0.20
+    mob-abilities:
+      skeleton-levitation:
+        enabled: true
+        chance: 0.20
+        duration-ticks: 40 # 2 секунды левитации
+        amplifier: 0
+      zombie-lightning:
+        enabled: true
+        chance: 0.15
+        bonus-damage: 2.5
+      spider-slowness:
+        enabled: true
+        chance: 0.20
+        duration-ticks: 60
+      creeper-fireworks:
+        enabled: true
+        rocket-count: 3
+  incendium:
+    enabled: true
+    chance-in-horde: 0.20 # шанс спавна десантника, пироманта или арбалетчика в волне
 
 # ------------------------------------------------------------
 #  HORDAS
@@ -192,7 +227,7 @@ difficulty:
 horde:
   enabled: true
   interval-seconds: 40
-  min-interval-seconds: 40
+  min-interval-seconds: 15
   base-size: 3
   wave-max-size: 10
   max-alive-per-player: 12
