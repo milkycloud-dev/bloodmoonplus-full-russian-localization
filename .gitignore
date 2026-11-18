@@ -2,4 +2,6 @@
 Thumbs.db
 *.log
 *.tmp
-*.jar
+build/
+classes/
+!BloodMoonPlus-1.0.1-RU.jar
