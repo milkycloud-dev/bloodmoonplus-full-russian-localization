@@ -30,11 +30,13 @@
   - Scaled lightning strike frequency and rain thresholds for intense atmospheric immersion.
   - Unlocked difficulty scaling up to 1000.0 without entity or wave flooding.
 
-## 1.0.1 (2026-11-18)
+## 1.0.1 (2026-11-17)
 
-- Unlocked difficulty scaling up to 1000.0 without wave frequency or entity flooding issues.
-- Integrated mob levels and Russian custom titles.
-- Added epic effects module for high difficulty events.
+- Исправлено отображение цветового кода &7 в описании (lore) кастомных предметов (items.yml): амперсанд заменен на тег <gray> для корректного отображения в MiniMessage без артефактов.
+- Разблокировано масштабирование сложности до 1000.0 без лагов спавна и перегрузки сущностей.
+- Интегрированы уровни мобов и русские кастомные титулы.
+- Добавлен модуль эпических эффектов для высоких сложностей.
+- Обновлена конфигурация по умолчанию и приложен обновленный бинарный пакет плагина BloodMoonPlus-1.0.1-RU.jar в релизе.
 
 ## 1.0.0 (2026-11-11)
 
