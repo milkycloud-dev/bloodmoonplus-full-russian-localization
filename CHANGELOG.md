@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.4 (2026-11-18)
+
+- **Countdown Parser & Single Warning Logic:**
+  - Fixed parameter parsing in `/luna countdown` when specifying duration units like `5m`, `10m`, `30s` (previously defaulted to 30 seconds due to duration token collision).
+  - Implemented single-warning countdown mode: sending strictly one atmospheric warning announcement at scheduled time, with zero periodic chat spam during the countdown until the moon rises (`countdown.periodic-alerts: false`).
+- **Non-Destructive Black Moon Bosses:**
+  - Added Ender Dragon boss (`dragon_negro` / `Чёрный Дракон Края`): actively hunts players in the Overworld without destroying blocks (cancelled `EntityChangeBlockEvent` and block-cleared explosions).
+  - Added Wither boss (`wither_sombra` / `Теневой Исушитель`): hunts players and fires wither skulls without destroying terrain.
+  - Registered both bosses in `bosses.yml` with spawn tables and abilities (`/luna boss dragon_negro`, `/luna boss wither_sombra`).
+- **Operator (OP) Permissions & Bypass:**
+  - Players with OP (`p.isOp()`) are completely exempt and allowed to switch to Spectator mode (`/gm 3`, `/gamemode spectator`) without being kicked.
+  - Blood Moon mobs and bosses ignore OP players (`EntityTargetLivingEntityEvent` cancelled).
+  - OP players are ignored by Dimension Wrath, Elytra Wrath, Dynamic Difficulty camping tracking, and Quit Penalty.
+- **Comprehensive Tab Completion:**
+  - Added auto-completion across all subcommands, time formats, warning levels, moon types, and boss identifiers via Tab.
+
 ## 1.0.3 (2026-11-18)
 
 - **Moon Types (Black Moon & Purple Moon):**

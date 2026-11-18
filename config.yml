@@ -134,6 +134,7 @@ event:
   force-difficulty: true           # sube la dificultad del mundo a EASY si está en Pacífico (necesario para spawnear mobs); se restaura al terminar
   protect-terrain: true            # las explosiones de mobs (creepers, etc.) NO rompen bloques; el jefe de la Luna SÍ los rompe (como el Wither vanilla)
   block-wither-spawn: false        # bloquea el spawn de CUALQUIER Wither excepto el jefe de la Luna (tag bloodmoon_boss); desactívalo si quieres Withers normales
+  ignore-ops: true                 # Игнорировать игроков с OP (мобы не агрятся, орда не спавнится на админов, разрешен GM 3)
   reward-on-stop: false         # dar recompensa a supervivientes si se detiene con /luna stop
   commands-on-start: []         # consola; {world}
   commands-on-end: []
@@ -178,6 +179,10 @@ warning:
   sound-pitch: 0.6
 
 countdown:
+  # Отправлять ли промежуточные периодические оповещения во время отсчета
+  # Если false (по умолчанию): отправляется СТРОГО ОДНО уведомление в момент запуска команды,
+  # и больше никаких уведомлений до самого восхода луны не спамит в чат.
+  periodic-alerts: false
   # Отображать ли параметры в обратном отсчете (по умолчанию false)
   show-parameters: false
   # Устрашающий звук при оповещениях обратного отсчета
@@ -205,7 +210,7 @@ spectator-block:
   enabled: true
   # Принудительно возвращать игроков из GM 3 в режим выживания при старте Луны или обратного отсчета
   kick-existing: true
-  # Право на обход блокировки (оставьте пустым "", чтобы запрет действовал на всех, включая модераторов)
+  # Право на обход блокировки (игроки с OP всегда имеют право на обход и свободный переход в GM 3)
   bypass-permission: ""
   # Сообщение при попытке переключиться в GM 3
   deny-message: "<red><bold>☠ Темные силы Кровавой Луны запрещают режим наблюдателя (GM 3)! Сражайтесь или погибните!</bold></red>"
