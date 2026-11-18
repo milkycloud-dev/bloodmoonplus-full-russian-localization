@@ -190,10 +190,17 @@ difficulty:
   epic-effects:
     enabled: true
     min-difficulty: 3.0   # активация эпичных эффектов на сложностях от x3
+    red-sky:
+      enabled: true
+      red-vignette: true
+      ambient-darkness: true
     lightning:
       enabled: true
-      interval-seconds: 18
-      chance-per-interval: 0.45
+      interval-seconds: 3
+      chance-per-interval: 0.90
+      strikes-per-cycle: 2
+      min-radius: 8.0
+      max-radius: 22.0
     particles:
       ambient-blood-spores: true
     fireworks:
@@ -220,6 +227,11 @@ difficulty:
   incendium:
     enabled: true
     chance-in-horde: 0.20 # шанс спавна десантника, пироманта или арбалетчика в волне
+    pyromancer:
+      min-difficulty: 6.0 # Пиромант появляется только со сложности x6 и выше
+      temp-fire: true     # автоматическое тушение огня и очистка при завершении луны
+
+horde: 0.20 # шанс спавна десантника, пироманта или арбалетчика в волне
 
 # ------------------------------------------------------------
 #  HORDAS
