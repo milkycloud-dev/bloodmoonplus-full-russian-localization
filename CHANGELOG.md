@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.0.3 (2026-11-18)
+
+- **Moon Types (Black Moon & Purple Moon):**
+  - Added support for 3 distinct Moon variations: classic Blood Moon (`blood`), Black Moon (`black`), and Purple Moon (`purple`).
+  - Added quick start commands: `/luna black [duration] [diff] [world]`, `/luna purple`, `/luna blood` (with Russian aliases `черная`, `фиолетовая`, `кровавая`).
+  - Black Moon features darkness aura, 1.5x mob damage/health multiplier by default, 1.5x horde size multiplier, and purple boss bar.
+  - Purple Moon features astral/void theme, 1.3x mob stats, 1.25x movement speed, and dragon breath/portal particles.
+  - Fully configurable attributes, announcements, bossbar colors, and multipliers in `config.yml` under `moon-types:`.
+- **Three Warning Types (Normal, Dangerous, Lethal):**
+  - Added 3 distinct warning levels for planned Blood Moons via `/luna warn <time> [normal|dangerous|lethal] [moon_type] [start]`.
+  - Added atmospheric chat broadcasts with gradients, full-screen titles, and custom sound effects.
+  - Added support for `start` flag in `/luna warn` to schedule and start countdown automatically.
+- **Dynamic Difficulty Escalation (Anti-Camping & Anti-Passivity):**
+  - Automatically escalates Blood Moon difficulty (+0.25x per 25s up to x5.0) when players hide in bunkers or avoid combat for > 45 seconds.
+  - Spawns punitive hordes around camping players to force engagement.
+  - Gradually decreases difficulty (-0.1x) when players actively engage in combat and defeat monsters.
+  - Added management commands: `/luna dynamic status`, `/luna dynamic on|off`, `/luna dynamic reset [world]`.
+- **Dimension Wrath (Nether & The End Anti-Camping):**
+  - Prevents players from evading the event by hiding in Nether or The End.
+  - Quadrupled damage (4.0 HP / 2 full hearts every 2 seconds) with targeted lightning strikes and dimension-specific particles.
+  - Broadcasts warning alerts to chat every 30 seconds and shows actionbar alerts.
+- **Elytra Wrath (Sky Flight Anti-Cheat):**
+  - Detects players gliding on Elytra at high altitude (Y >= 90) for > 3 seconds.
+  - Strikes with lightning, collapses Elytra flight (`setGliding(false)`), inflicts 4.0 HP damage every 2 seconds, and broadcasts alerts every 30 seconds.
+- **Spectator Mode (GM 3) Lockdown:**
+  - Blocks `/gm 3`, `/gamemode spectator`, and related commands during countdown and active Blood Moon.
+  - Automatically kicks existing spectators back into Survival mode when the event or countdown begins.
+- **Timer Adjustment Controls:**
+  - Added `/luna time status`, `/luna time add <time> [world]`, `/luna time take <time> [world]`, `/luna time set <time> [world]`.
+- **Lightning Control Commands:**
+  - Added `/luna lightning storm`, `smite`, `strike`, `stop`, `status`.
+- **Scheduled Warning Clean-Up:**
+  - Scheduled warnings set strictly to 10 minutes before start (`schedule.warnings-minutes: [10]`), eliminating 5-minute and 1-minute spam.
+
 ## 1.0.2 (2026-11-18)
 
 - **Countdown & Warning System:**

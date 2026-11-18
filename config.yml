@@ -44,7 +44,7 @@ schedule:
   interval-hours: 72            # solo para modo interval
   grace-seconds: 180            # si el servidor estaba apagado a la hora exacta, aún se dispara dentro de este margen
   skip-if-no-players: true      # no inicia el evento si el mundo está vacío
-  warnings-minutes: [10, 5, 1]  # avisos antes de empezar
+  warnings-minutes: [10]        # оповещения перед запланированным стартом (только за 10 мин)
   days:
     MONDAY:
       - time: "14:00"
@@ -196,6 +196,180 @@ countdown:
   title: "<dark_red><bold>КРОВАВАЯ ЛУНА ПРИБЛИЖАЕТСЯ</bold></dark_red>"
   subtitle: "<red>Начало через {time}...</red>"
   subtitle-with-params: "<red>Начало через {time}... <gray>(Сложность x{difficulty})</gray></red>"
+
+# ------------------------------------------------------------
+#  БЛОКИРОВКА РЕЖИМА НАБЛЮДАТЕЛЯ (GM 3 / SPECTATOR BLOCK)
+# ------------------------------------------------------------
+spectator-block:
+  # Запретить ли переход в режим наблюдателя (gm 3) во время Кровавой Луны и обратного отсчета
+  enabled: true
+  # Принудительно возвращать игроков из GM 3 в режим выживания при старте Луны или обратного отсчета
+  kick-existing: true
+  # Право на обход блокировки (оставьте пустым "", чтобы запрет действовал на всех, включая модераторов)
+  bypass-permission: ""
+  # Сообщение при попытке переключиться в GM 3
+  deny-message: "<red><bold>☠ Темные силы Кровавой Луны запрещают режим наблюдателя (GM 3)! Сражайтесь или погибните!</bold></red>"
+  # Сообщение при принудительном переводе из GM 3 в выживание
+  kick-message: "<red><bold>☠ Кровавая Луна началась: режим наблюдателя отключен, вы возвращены в режим выживания!</bold></red>"
+
+# ------------------------------------------------------------
+#  ГНЕВ ИЗМЕРЕНИЙ (DIMENSION WRATH / АНТИ-ОТСИЖИВАНИЕ В АДУ И ЭНДЕ)
+# ------------------------------------------------------------
+dimension-wrath:
+  # Включить ли кару игроков, пытающихся отсидеться в других измерениях во время Кровавой Луны
+  enabled: true
+  # Применять ли кару в Незере (Аду)
+  apply-to-nether: true
+  # Применять ли кару в Крае (Энде)
+  apply-to-end: true
+  # Интервал ударов прицельной молнией (в секундах)
+  strike-interval-seconds: 2
+  # Урон за один удар (4.0 = 2 полных сердца, увеличено в 4 раза по сравнению со старым 1.0)
+  damage: 4.0
+  # Интервал сообщений в общий чат (в секундах)
+  broadcast-interval-seconds: 30
+  # Освобождать ли игроков в креативе и спектаторе
+  exempt-creative: true
+  # Право для обхода кары измерений
+  bypass-permission: "bloodmoon.bypass.dimensionwrath"
+  # Сообщения для Незера
+  nether:
+    broadcast-message: "<gradient:#ff4500:#990000><bold>⚡ ГНЕВ НЕЗЕРА:</bold></gradient> <red>В преисподней нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен адской молнией за попытку отсидеться в аду!</red>"
+    actionbar-message: "<gradient:#ff5500:#aa0000><bold>⚡ Разряд Незера поражает вас за бегство в ад! (-{hearts} ❤)</bold></gradient>"
+    death-message: "<gradient:#ff4500:#990000><bold>☠ Игрок <yellow>{player}</yellow> пытался спастись в аду от Кровавой Луны, но был испепелен адской молнией!</gradient>"
+  # Сообщения для Энда
+  end:
+    broadcast-message: "<gradient:#b000ff:#440077><bold>⚡ ГНЕВ ЭНДА:</bold></gradient> <red>В пустоте Края нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен астральной молнией за попытку отсидеться в Энде!</red>"
+    actionbar-message: "<gradient:#c033ff:#660099><bold>⚡ Пустотный разряд Энда поражает вас за бегство в Край! (-{hearts} ❤)</bold></gradient>"
+    death-message: "<gradient:#b000ff:#440077><bold>☠ Игрок <yellow>{player}</yellow> пытался укрыться в Энде от Кровавой Луны, но был поглощен астральной молнией!</gradient>"
+
+# ------------------------------------------------------------
+#  ГНЕВ НЕБЕС (ELYTRA WRATH / АНТИ-ПОЛЕТ НА ЭЛИТРАХ В НЕБЕСАХ)
+# ------------------------------------------------------------
+elytra-wrath:
+  # Включить ли сбивание и кару игроков, парящих на элитрах высоко в небе
+  enabled: true
+  # Минимальная высота Y, начиная с которой полет считается уклонением
+  min-altitude: 90.0
+  # Сколько секунд непрерывного полета разрешено до первого удара молнии
+  flight-time-seconds: 3
+  # Интервал повторных ударов молнией (в секундах)
+  strike-interval-seconds: 2
+  # Урон за один удар молнии (4.0 = 2 полных сердца)
+  damage: 4.0
+  # Складывать ли крылья элитр (принудительно прерывать планирование)
+  disrupt-flight: true
+  # Интервал сообщений в общий чат (в секундах)
+  broadcast-interval-seconds: 30
+  # Освобождать ли игроков в креативе и спектаторе
+  exempt-creative: true
+  # Право для обхода кары элитр
+  bypass-permission: "bloodmoon.bypass.elytrawrath"
+  # Сообщение в общий чат
+  broadcast-message: "<gradient:#00e5ff:#0055ff><bold>⚡ ГНЕВ НЕБЕС:</bold></gradient> <red>В небесах нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен небесной молнией за попытку летать на элитрах!</red>"
+  # Сообщение в экшн-бар
+  actionbar-message: "<gradient:#00e5ff:#0088ff><bold>⚡ Небесный разряд Кровавой Луны сбивает вас с небес! (-{hearts} ❤)</bold></gradient>"
+  # Сообщение о смерти игрока от небесной молнии
+  death-message: "<gradient:#00e5ff:#0055ff><bold>☠ Игрок <yellow>{player}</yellow> пытался скрыться от Кровавой Луны в небесах на элитрах, но был испепелен молнией!</gradient>"
+
+# ------------------------------------------------------------
+#  ДИНАМИЧЕСКАЯ СЛОЖНОСТЬ (DYNAMIC DIFFICULTY / АНТИ-ОТСИЖИВАНИЕ БЕЗ БОЯ)
+# ------------------------------------------------------------
+dynamic-difficulty:
+  # Включить ли автоматическое увеличение сложности при отсиживании игроков
+  enabled: true
+  # Время бездействия в бою (в секундах), после которого игрок считается отсиживающимся
+  inactivity-seconds: 45
+  # Радиус проверки стояния на месте (в блоках, кемпинг в убежище)
+  camping-radius: 4.0
+  # Интервал эскалации сложности (в секундах)
+  escalation-interval-seconds: 25
+  # Шаг увеличения сложности за каждое бездействие
+  difficulty-step: 0.25
+  # Максимальная сложность, до которой может вырасти Луна
+  max-difficulty: 5.0
+  # Спавнить ли карательную орду монстров вокруг прячущегося игрока
+  spawn-punishment-horde: true
+  # Количество мобов в карательной орде
+  punishment-horde-count: 5
+  # Снижать ли сложность при активных убийствах монстров игроками
+  decay-on-combat: true
+  # Количество убийств монстров, необходимое для снижения сложности на 1 шаг
+  kills-for-decay: 10
+  # Шаг снижения сложности при активном бое
+  decay-step: 0.1
+  # Освобождать ли игроков в креативе и спектаторе
+  exempt-creative: true
+  bypass-permission: "bloodmoon.bypass.dynamicdifficulty"
+  announcement:
+    escalate: "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Трусость и пассивность выживших распаляют древнее зло! Сложность Луны возросла до <yellow>x{difficulty}</yellow>!</red>"
+    camper-warning: "<gradient:#ff0000:#aa0000><bold>☠ Кровавая Луна чует ваш страх! Вы прячетесь от боя! Сражайтесь или навлечёте беду!</bold></gradient>"
+    decay: "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green>Ярость Кровавой Луны стихает благодаря активному бою! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
+
+# ------------------------------------------------------------
+#  ТИПЫ ПРЕДУПРЕЖДЕНИЙ О НАМЕЧЕННОЙ ЛУНЕ (WARNING TYPES)
+# ------------------------------------------------------------
+warning-types:
+  # 1. Обычная Кровавая Луна (/luna warn 10m normal)
+  normal:
+    default-difficulty: 1.0
+    chat: "<gradient:#ff4500:#b30000><bold>🌙 ЗНАМЕНИЕ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Небо на горизонте окрашивается в багровый цвет... Через <yellow>{time}</yellow> взойдет Кровавая Луна! Готовьте оружие и укрепляйте убежища!</red>"
+    title: "<gradient:#ff5555:#aa0000><bold>КРОВАВАЯ ЛУНА</bold></gradient>"
+    subtitle: "<gray>Взойдет через <yellow>{time}</yellow></gray>"
+    sound: "ambient.cave"
+    volume: 1.0
+    pitch: 0.8
+  # 2. Опасная Кровавая Луна (/luna warn 10m dangerous)
+  dangerous:
+    default-difficulty: 2.5
+    chat: "<gradient:#ff0055:#990022><bold>☠ ЗЛОВЕЩЕЕ ПРЕДЗНАМЕНОВАНИЕ:</bold></gradient> <red>Воздух наполняется запахом пепла и серы... Приближается <bold><dark_red>ОПАСНАЯ Кровавая Луна</dark_red></bold> через <yellow>{time}</yellow>! Полчища древних тварей жаждут крови!</red>"
+    title: "<gradient:#ff0033:#770011><bold>☠ ОПАСНАЯ КРОВАВАЯ ЛУНА ☠</bold></gradient>"
+    subtitle: "<red>Приближается через <yellow>{time}</yellow>! Спасайтесь!</red>"
+    sound: "entity.ender_dragon.growl"
+    volume: 1.0
+    pitch: 0.9
+  # 3. Смертельная Кровавая Луна (/luna warn 10m lethal)
+  lethal:
+    default-difficulty: 5.0
+    chat: "<gradient:#880000:#ff0000><bold>⚡ СМЕРТОНОСНЫЙ РОК:</bold></gradient> <red><bold>Земля содрогается, а небеса плачут кровью...</bold> Через <yellow>{time}</yellow> взойдет <gradient:#ff0000:#330000><bold>СМЕРТЕЛЬНАЯ Кровавая Луна</bold></gradient>! Шансов выжить почти нет. Никакой пощады не будет!</red>"
+    title: "<gradient:#330000:#ff0000><bold>☠ СМЕРТЕЛЬНАЯ ЛУНА ☠</bold></gradient>"
+    subtitle: "<dark_red><bold>Через {time}! Никто не покинет эту ночь живым!</bold></dark_red>"
+    sound: "entity.wither.spawn"
+    volume: 1.0
+    pitch: 0.6
+
+# ------------------------------------------------------------
+#  РАЗНОВИДНОСТИ ЛУНЫ (MOON TYPES: BLACK MOON & PURPLE MOON)
+# ------------------------------------------------------------
+moon-types:
+  black:
+    display-name: "Чёрная Луна"
+    bar-color: PURPLE
+    health-multiplier: 1.5
+    damage-multiplier: 1.5
+    speed-multiplier: 1.15
+    horde-size-multiplier: 1.5
+    announcement:
+      chat: "<gradient:#222222:#880088><bold>🌑 ЗАТМЕНИЕ ЧЁРНОЙ ЛУНЫ:</bold></gradient> <dark_gray><bold>Тьма поглотила небеса...</bold></dark_gray> <red>Взошла ЧЁРНАЯ ЛУНА! Порождения мрака стали на 50% сильнее и многочисленнее!</red>"
+      title: "<gradient:#111111:#660066><bold>🌑 ЧЁРНАЯ ЛУНА 🌑</bold></gradient>"
+      subtitle: "<gray>Тьма накрыла мир. Сражайтесь или сгиньте во мраке!</gray>"
+      sound: "entity.wither.spawn"
+      volume: 1.0
+      pitch: 0.5
+  purple:
+    display-name: "Фиолетовая Луна"
+    bar-color: PURPLE
+    health-multiplier: 1.3
+    damage-multiplier: 1.3
+    speed-multiplier: 1.25
+    horde-size-multiplier: 1.25
+    announcement:
+      chat: "<gradient:#9900ff:#e000ff><bold>🔮 РАЗРЫВ ПУСТОТЫ:</bold></gradient> <light_purple>Небесный свод раскололся фиолетовым сиянием... Взошла ФИОЛЕТОВАЯ ЛУНА! Астральные твари проникли в этот мир!</light_purple>"
+      title: "<gradient:#8800ff:#ff00ff><bold>🔮 ФИОЛЕТОВАЯ ЛУНА 🔮</bold></gradient>"
+      subtitle: "<light_purple>Астральный разрыв открыт! Остерегайтесь магии пустоты!</light_purple>"
+      sound: "entity.ender_dragon.growl"
+      volume: 1.0
+      pitch: 1.1
 
 # ------------------------------------------------------------
 #  ANUNCIOS DE CHAT
