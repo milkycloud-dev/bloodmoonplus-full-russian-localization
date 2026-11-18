@@ -79,7 +79,7 @@ cmd:
   next-header: "<gold>Предстоящие Кровавые Луны:"
   next-entry: "<dark_gray>- <white>{when} <gray>· через {in} · <red>x{difficulty}"
   next-none: "<gray>Расписание не настроено."
-  usage-difficulty: "<yellow>Использование: /luna difficulty <x3|x2|triple> [мир]"
+  usage-difficulty: "<yellow>Использование: /luna difficulty <x1-x1000> [мир]"
   difficulty-set: "<green>Сложность изменена на x{difficulty}. Влияет на всех новых мобов."
   usage-boss: "<yellow>Использование: /luna boss <id> [мир]. Боссы: {bosses}"
   boss-spawned: "<green>Босс {boss} успешно призван."
