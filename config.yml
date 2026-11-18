@@ -190,17 +190,16 @@ difficulty:
   epic-effects:
     enabled: true
     min-difficulty: 3.0   # активация эпичных эффектов на сложностях от x3
+    rain-min-difficulty: 100.0 # сильный дождь и гроза включаются только со сложности x100
     red-sky:
       enabled: true
       red-vignette: true
-      ambient-darkness: true
     lightning:
       enabled: true
-      interval-seconds: 3
-      chance-per-interval: 0.90
-      strikes-per-cycle: 2
-      min-radius: 8.0
-      max-radius: 22.0
+      base-strikes-per-sec: 0.35 # частота на минимальной сложности (x3)
+      max-strikes-per-sec: 35.0  # частота на экстремальной сложности (x1000)
+      min-radius: 8.0            # минимальное расстояние от игрока
+      max-radius: 28.0           # максимальный радиус зоны молний
     particles:
       ambient-blood-spores: true
     fireworks:
