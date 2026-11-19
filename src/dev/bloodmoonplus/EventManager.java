@@ -408,6 +408,10 @@ public final class EventManager {
                this.plugin.spectatorBlock().kickAllSpectators(w);
             }
 
+            if (this.plugin.witherControl() != null) {
+               this.plugin.witherControl().onBloodMoonStart(w);
+            }
+
             this.runCommands(this.cmdStart, w, null);
          }
 
@@ -519,6 +523,9 @@ public final class EventManager {
       }
 
       this.plugin.bosses().removeAll(s.world);
+      if (this.plugin.witherControl() != null) {
+         this.plugin.witherControl().onBloodMoonStop(s.world);
+      }
       if (this.plugin.epicEffects() != null) {
          this.plugin.epicEffects().onSessionStop(s.world);
       }

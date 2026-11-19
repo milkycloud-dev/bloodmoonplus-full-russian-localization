@@ -34,6 +34,7 @@ public final class BloodMoonPlus extends JavaPlugin {
    private ElytraWrathManager elytraWrath;
    private LightningEffectManager lightning;
    private DynamicDifficultyManager dynamicDifficulty;
+   private WitherControlManager witherControl;
 
    public void onEnable() {
       Keys.init(this);
@@ -70,6 +71,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       this.elytraWrath = new ElytraWrathManager(this);
       this.lightning = new LightningEffectManager(this);
       this.dynamicDifficulty = new DynamicDifficultyManager(this);
+      this.witherControl = new WitherControlManager(this);
       this.reloadAll();
       Bukkit.getScheduler().runTaskTimer(this, () -> {
          this.schedule.tick();
@@ -124,6 +126,10 @@ public final class BloodMoonPlus extends JavaPlugin {
          this.dynamicDifficulty.shutdown();
       }
 
+      if (this.witherControl != null) {
+         this.witherControl.shutdown();
+      }
+
       if (this.epicEffects != null) {
          this.epicEffects.onSessionStop(null);
       }
@@ -169,6 +175,9 @@ public final class BloodMoonPlus extends JavaPlugin {
       if (this.dynamicDifficulty != null) {
          this.dynamicDifficulty.reload();
       }
+      if (this.witherControl != null) {
+         this.witherControl.reload();
+      }
       this.getLogger().info("BloodMoonPlus recargado.");
    }
 
@@ -208,6 +217,10 @@ public final class BloodMoonPlus extends JavaPlugin {
 
    public LightningEffectManager lightning() {
       return this.lightning;
+   }
+
+   public WitherControlManager witherControl() {
+      return this.witherControl;
    }
 
    public DynamicDifficultyManager dynamicDifficulty() {

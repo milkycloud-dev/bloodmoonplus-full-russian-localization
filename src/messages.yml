@@ -27,6 +27,7 @@ event:
   mob-slain: "<gray>× <white>{player} <gray>убил <red>{mob}<gray>."
   death-cause-unknown: "<gray>поглощен ночью"
   wither-blocked: "<red>Визер запрещен на этом сервере. Может появиться только босс Кровавой Луны."
+  wither-only-bloodmoon: "<red>Иссушитель запрещён в обычном мире! Его можно призвать только во время Кровавой Луны."
   survivors-header: "<gold>Выжившие в Кровавой Луне в мире {world}:"
   survivors-none: "<gray>Нет игроков, имеющих право на награду выжившего в {world}."
   survivor-disqualified-death: "<red>Вы погибли и потеряли право на награду выжившего."

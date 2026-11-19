@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.6 (2026-11-19)
+
+- **Dynamic Wither Control & WorldGuard Synchronization (`WitherControlManager`):**
+  - **Blood Moon Lifecycle Automation:** Automatically clears WorldGuard's `deny-spawn` on `__global__` in configured worlds when Blood Moon begins, allowing Withers to spawn.
+  - **Peacetime Re-Locking:** Automatically restores WorldGuard's `deny-spawn: [minecraft:wither]` on `__global__` immediately when Blood Moon ends.
+  - **Fail-Safe Startup and Shutdown:** Verifies active session state on reload or enable; on plugin disable or server shutdown, guarantees that `deny-spawn: [minecraft:wither]` is restored.
+  - **Dual-Layer Protection in `EventListener`:** Custom `onWitherSpawn` handler blocks player-spawned Withers outside Blood Moon with localized message (`event.wither-only-bloodmoon`), permits them during Blood Moon, and unconditionally un-cancels Blood Moon boss spawns (`BossManager.isSpawningBoss()`).
+  - **Configurable:** Added `wither-control:` block in `config.yml` with `enabled`, `allow-only-during-bloodmoon`, `sync-worldguard`, and `worlds`.
+
 ## 1.0.5 (2026-11-19)
 
 - **Standalone Boss Summoning Outside Blood Moon:**

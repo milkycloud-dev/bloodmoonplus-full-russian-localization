@@ -72,24 +72,49 @@ public final class EventListener implements Listener {
    }
 
    @EventHandler(
-      priority = EventPriority.LOWEST,
-      ignoreCancelled = true
+      priority = EventPriority.HIGHEST,
+      ignoreCancelled = false
    )
    public void onWitherSpawn(CreatureSpawnEvent e) {
-      if (e.getEntityType() == EntityType.WITHER) {
-         if (this.plugin.events().blockWitherSpawn()) {
-            if (!BossManager.isSpawningBoss()) {
-               if (!e.getEntity().getScoreboardTags().contains("bloodmoon_boss")) {
-                  e.setCancelled(true);
-                  Location loc = e.getLocation();
-                  if (loc.getWorld() != null) {
-                     for (Player p : loc.getWorld().getPlayers()) {
-                        if (p.getLocation().distanceSquared(loc) <= 2304.0) {
-                           p.sendMessage(this.plugin.messages().prefixed("event.wither-blocked"));
-                        }
-                     }
+      if (e.getEntityType() != EntityType.WITHER) {
+         return;
+      }
+
+      if (BossManager.isSpawningBoss() || e.getEntity().getScoreboardTags().contains("bloodmoon_boss") || this.plugin.bosses().isBoss(e.getEntity())) {
+         e.setCancelled(false);
+         return;
+      }
+
+      World w = e.getLocation().getWorld();
+      if (w == null) {
+         return;
+      }
+
+      boolean isActive = this.plugin.events().isActive(w);
+
+      if (this.plugin.witherControl() != null && this.plugin.witherControl().isControlledWorld(w)) {
+         if (this.plugin.witherControl().isAllowOnlyDuringBloodMoon()) {
+            if (!isActive) {
+               e.setCancelled(true);
+               Location loc = e.getLocation();
+               for (Player p : w.getPlayers()) {
+                  if (p.getLocation().distanceSquared(loc) <= 2304.0) {
+                     p.sendMessage(this.plugin.messages().prefixed("event.wither-only-bloodmoon"));
                   }
                }
+            } else {
+               e.setCancelled(false);
+            }
+            return;
+         }
+      }
+
+      if (this.plugin.events().blockWitherSpawn() && isActive) {
+         e.setCancelled(true);
+         Location loc = e.getLocation();
+         for (Player p : w.getPlayers()) {
+            if (p.getLocation().distanceSquared(loc) <= 2304.0) {
+               p.sendMessage(this.plugin.messages().prefixed("event.wither-blocked"));
             }
          }
       }

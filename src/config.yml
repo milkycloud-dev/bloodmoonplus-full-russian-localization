@@ -135,6 +135,17 @@ event:
   protect-terrain: true            # las explosiones de mobs (creepers, etc.) NO rompen bloques; el jefe de la Luna SÍ los rompe (como el Wither vanilla)
   block-wither-spawn: false        # bloquea el spawn de CUALQUIER Wither excepto el jefe de la Luna (tag bloodmoon_boss); desactívalo si quieres Withers normales
   ignore-ops: true                 # Игнорировать игроков с OP (мобы не агрятся, орда не спавнится на админов, разрешен GM 3)
+
+# Управление Иссушителем: запрещен в мирное время, разрешен во время Кровавой Луны
+wither-control:
+  enabled: true
+  # Разрешать призыв и спавн Иссушителя ТОЛЬКО во время активной Кровавой Луны
+  allow-only-during-bloodmoon: true
+  # Автоматически снимать/возвращать флаг deny-spawn в WorldGuard для региона __global__
+  sync-worldguard: true
+  # Миры, для которых действует ограничение
+  worlds:
+    - world
   reward-on-stop: false         # dar recompensa a supervivientes si se detiene con /luna stop
   commands-on-start: []         # consola; {world}
   commands-on-end: []
