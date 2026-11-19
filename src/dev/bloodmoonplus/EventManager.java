@@ -945,9 +945,15 @@ public final class EventManager {
                      }
 
                      s.lastHordeAnnounceMs = System.currentTimeMillis();
-                     if (this.plugin.messages().announce("horde", true)) {
+                     if (this.plugin.messages().announce("horde", false)) {
                         this.plugin.messages().all("event.horde-descending", "player", px.getName());
                      }
+                     String personalHorde = this.plugin.locales().get("event.horde-descending-personal");
+                     if (personalHorde == null || personalHorde.isEmpty() || personalHorde.equals("event.horde-descending-personal")) {
+                        personalHorde = "<red><bold>⚡ Орда нападает на вас! ⚡</bold></red>";
+                     }
+                     px.sendActionBar(Util.mini(personalHorde));
+                     px.playSound(px.getLocation(), Sound.ENTITY_RAVAGER_ROAR, 0.7F, 0.8F);
                   }
 
                   for (int i = 0; i < amount; i++) {

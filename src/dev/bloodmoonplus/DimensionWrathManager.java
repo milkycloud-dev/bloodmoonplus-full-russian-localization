@@ -30,6 +30,7 @@ public final class DimensionWrathManager implements Listener {
    private int broadcastIntervalSeconds = 30;
    private boolean exemptCreative = true;
    private String bypassPermission = "bloodmoon.bypass.dimensionwrath";
+   private boolean broadcastChat = false;
 
    private String netherBroadcast;
    private String netherActionbar;
@@ -60,6 +61,7 @@ public final class DimensionWrathManager implements Listener {
       this.broadcastIntervalSeconds = Math.max(1, cfg.getInt("dimension-wrath.broadcast-interval-seconds", cfg.getInt("nether-wrath.broadcast-interval-seconds", 30)));
       this.exemptCreative = cfg.getBoolean("dimension-wrath.exempt-creative", true);
       this.bypassPermission = cfg.getString("dimension-wrath.bypass-permission", "bloodmoon.bypass.dimensionwrath");
+      this.broadcastChat = cfg.getBoolean("dimension-wrath.broadcast-chat", cfg.getBoolean("nether-wrath.broadcast-chat", false));
 
       this.netherBroadcast = cfg.getString(
          "dimension-wrath.nether.broadcast-message",
@@ -191,7 +193,11 @@ public final class DimensionWrathManager implements Listener {
             String bcMsg = isEnd ? this.endBroadcast : this.netherBroadcast;
             if (bcMsg != null && !bcMsg.isEmpty()) {
                String msg = bcMsg.replace("{player}", p.getName()).replace("{hearts}", heartsStr);
-               Bukkit.broadcast(Util.mini(msg));
+               if (this.broadcastChat) {
+                  Bukkit.broadcast(Util.mini(msg));
+               } else {
+                  p.sendMessage(Util.mini(msg));
+               }
             }
          }
       }

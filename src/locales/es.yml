@@ -23,7 +23,9 @@ event:
   summary-line: "<gray>{pos}. <white>{player} <dark_gray>— <red>{kills} bajas"
   survivors: "<green>¡Sobreviviste a la Luna de Sangre! Recibes tu recompensa."
   horde-descending: "<dark_red><bold>⚡ ¡Una horda desciende sobre <white>{player}<dark_red>! ⚡"
-  player-died: "<dark_red>☠ <white>{player} <dark_red>cayó durante la Luna de Sangre. <gray>(<white>{cause}<gray>)"
+  horde-descending-personal: "<red><bold>⚡ ¡Una horda desciende sobre ti! ⚡</bold></red>"
+  player-died: "<dark_red>☠</dark_red> <white><bold>{player}</bold></white> <red>cayó durante la Luna de Sangre!</red> <dark_gray>(<gray>{cause}</gray>)</dark_gray>"
+  player-died-actionbar: "<dark_red>☠ <white>{player}</white> murió durante la Luna de Sangre!</dark_red>"
   mob-slain: "<gray>× <white>{player} <gray>derrotó a <red>{mob}<gray>."
   death-cause-unknown: "<gray>la noche lo consumió"
   wither-blocked: "<red>El Wither está vetado en este servidor. Solo el jefe de la Luna de Sangre puede aparecer."
@@ -59,6 +61,9 @@ boss:
 # ==================== Loot ====================
 loot:
   broadcast: "<yellow>¡<white>{player} <yellow>obtuvo {item} <dark_gray>[{rarity}<dark_gray>]<yellow>!"
+  broadcast-epic: "<light_purple>✦</light_purple> <white>{player}</white> <gray>consiguió objeto épico:</gray> {item}"
+  broadcast-legendary: "<gold>★ <bold>DROP LEGENDARIO:</bold></gold> <white><bold>{player}</bold></white> <yellow>desenterró reliquia</yellow> {item}<yellow>!</yellow>"
+  broadcast-mythic: "<gradient:#ff0055:#aa00ff><bold>⚡ ARTEFACTO MÍTICO ⚡</bold></gradient> <white><bold>{player}</bold></white> <light_purple>despertó la reliquia antigua:</light_purple> {item}<light_purple>!</light_purple>"
 
 # ==================== Items ====================
 item:

@@ -2,6 +2,7 @@ package dev.bloodmoonplus;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -276,18 +277,54 @@ public final class EventListener implements Listener {
       }
    }
 
-   @EventHandler
+   @EventHandler(priority = EventPriority.HIGH)
    public void onPlayerDeath(PlayerDeathEvent e) {
       EventManager.Session s = this.plugin.events().session(e.getEntity().getWorld());
       if (s != null) {
-         s.dead.add(e.getEntity().getUniqueId());
-         s.died.add(e.getEntity().getUniqueId());
-         World w = e.getEntity().getWorld();
-         w.strikeLightningEffect(e.getEntity().getLocation());
-         w.playSound(e.getEntity().getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.7F, 0.5F);
-         String cause = e.getDeathMessage() != null ? e.getDeathMessage() : this.plugin.locales().get("event.death-cause-unknown");
-         if (this.plugin.messages().announce("player-deaths", false)) {
-            this.plugin.messages().all("event.player-died", "player", e.getEntity().getName(), "cause", cause);
+         Player p = e.getEntity();
+         s.dead.add(p.getUniqueId());
+         s.died.add(p.getUniqueId());
+         World w = p.getWorld();
+         w.strikeLightningEffect(p.getLocation());
+         w.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.7F, 0.5F);
+
+         if (p.getPersistentDataContainer().has(Keys.QUIT_PENALIZED, PersistentDataType.BYTE)) {
+            return;
+         }
+
+         if (this.plugin.messages().announce("player-deaths", true)) {
+            String rawCause = null;
+            if (e.deathMessage() != null) {
+               rawCause = PlainTextComponentSerializer.plainText().serialize(e.deathMessage());
+            } else if (e.getDeathMessage() != null) {
+               rawCause = e.getDeathMessage();
+            }
+
+            String cause;
+            if (rawCause != null && !rawCause.trim().isEmpty()) {
+               String pName = p.getName();
+               if (rawCause.startsWith(pName + " ")) {
+                  cause = rawCause.substring(pName.length() + 1).trim();
+               } else {
+                  cause = rawCause.trim();
+               }
+            } else {
+               cause = this.plugin.locales().get("event.death-cause-unknown");
+            }
+
+            e.deathMessage(null);
+            this.plugin.messages().all("event.player-died", "player", p.getName(), "cause", cause);
+
+            String actionbarText = this.plugin.locales().get("event.player-died-actionbar", "player", p.getName());
+            if (actionbarText == null || actionbarText.isEmpty() || actionbarText.equals("event.player-died-actionbar")) {
+               actionbarText = "<dark_red>☠ <white>" + p.getName() + "</white> погиб во время Кровавой Луны!</dark_red>";
+            }
+            Component abComp = Util.mini(actionbarText);
+
+            for (Player wp : w.getPlayers()) {
+               wp.playSound(wp.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.6F, 0.6F);
+               wp.sendActionBar(abComp);
+            }
          }
       }
    }

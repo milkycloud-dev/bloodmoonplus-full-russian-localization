@@ -31,6 +31,7 @@ public final class ElytraWrathManager implements Listener {
    private int broadcastIntervalSeconds = 30;
    private boolean exemptCreative = true;
    private String bypassPermission = "bloodmoon.bypass.elytrawrath";
+   private boolean broadcastChat = false;
 
    private String broadcastMessage;
    private String actionbarMessage;
@@ -58,6 +59,7 @@ public final class ElytraWrathManager implements Listener {
       this.broadcastIntervalSeconds = Math.max(1, cfg.getInt("elytra-wrath.broadcast-interval-seconds", 30));
       this.exemptCreative = cfg.getBoolean("elytra-wrath.exempt-creative", true);
       this.bypassPermission = cfg.getString("elytra-wrath.bypass-permission", "bloodmoon.bypass.elytrawrath");
+      this.broadcastChat = cfg.getBoolean("elytra-wrath.broadcast-chat", false);
 
       this.broadcastMessage = cfg.getString(
          "elytra-wrath.broadcast-message",
@@ -157,7 +159,12 @@ public final class ElytraWrathManager implements Listener {
                if (nowSec - lastBc >= (long)this.broadcastIntervalSeconds) {
                   this.lastBroadcastSec.put(id, nowSec);
                   if (this.broadcastMessage != null && !this.broadcastMessage.isEmpty()) {
-                     Bukkit.broadcast(Util.mini(this.broadcastMessage.replace("{player}", p.getName()).replace("{hearts}", heartsStr)));
+                     String msg = this.broadcastMessage.replace("{player}", p.getName()).replace("{hearts}", heartsStr);
+                     if (this.broadcastChat) {
+                        Bukkit.broadcast(Util.mini(msg));
+                     } else {
+                        p.sendMessage(Util.mini(msg));
+                     }
                   }
                }
             }

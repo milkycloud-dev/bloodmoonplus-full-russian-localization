@@ -23,7 +23,9 @@ event:
   summary-line: "<gray>{pos}. <white>{player} <dark_gray>- <red>{kills} убийств"
   survivors: "<green>Вы пережили Кровавую Луну! Получена награда выжившего."
   horde-descending: "<dark_red><bold>⚡ Орда нападает на игрока <white>{player}<dark_red>! ⚡"
-  player-died: "<dark_red>☠ <white>{player} <dark_red>погиб во время Кровавой Луны. <gray>(<white>{cause}<gray>)"
+  horde-descending-personal: "<red><bold>⚡ A horde is attacking you! ⚡</bold></red>"
+  player-died: "<dark_red>☠</dark_red> <white><bold>{player}</bold></white> <red>fell during the Blood Moon!</red> <dark_gray>(<gray>{cause}</gray>)</dark_gray>"
+  player-died-actionbar: "<dark_red>☠ <white>{player}</white> died during the Blood Moon!</dark_red>"
   mob-slain: "<gray>× <white>{player} <gray>убил <red>{mob}<gray>."
   death-cause-unknown: "<gray>поглощен ночью"
   wither-blocked: "<red>Визер запрещен на этом сервере. Может появиться только босс Кровавой Луны."
@@ -59,7 +61,10 @@ boss:
 
 # ==================== Лут ====================
 loot:
-  broadcast: "<yellow><white>{player} <yellow>получил {item} <dark_gray>[{rarity}<dark_gray>]<yellow>!"
+  broadcast: "<yellow><white>{player} <yellow>found {item} <dark_gray>[{rarity}<dark_gray>]<yellow>!"
+  broadcast-epic: "<light_purple>✦</light_purple> <white>{player}</white> <gray>found epic item:</gray> {item}"
+  broadcast-legendary: "<gold>★ <bold>LEGENDARY DROP:</bold></gold> <white><bold>{player}</bold></white> <yellow>uncovered relic</yellow> {item}<yellow>!</yellow>"
+  broadcast-mythic: "<gradient:#ff0055:#aa00ff><bold>⚡ MYTHIC ARTIFACT ⚡</bold></gradient> <white><bold>{player}</bold></white> <light_purple>awakened ancient relic:</light_purple> {item}<light_purple>!</light_purple>"
 
 # ==================== Предметы ====================
 item:

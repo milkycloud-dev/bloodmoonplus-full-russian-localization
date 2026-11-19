@@ -40,6 +40,7 @@ public final class DynamicDifficultyManager implements Listener {
    private double decayStep = 0.1;
    private boolean exemptCreative = true;
    private String bypassPermission = "bloodmoon.bypass.dynamicdifficulty";
+   private boolean broadcastChat = false;
 
    // Atmospheric messages
    private String broadcastEscalate;
@@ -78,6 +79,7 @@ public final class DynamicDifficultyManager implements Listener {
       this.decayStep = Math.max(0.01, cfg.getDouble("dynamic-difficulty.decay-step", 0.1));
       this.exemptCreative = cfg.getBoolean("dynamic-difficulty.exempt-creative", true);
       this.bypassPermission = cfg.getString("dynamic-difficulty.bypass-permission", "bloodmoon.bypass.dynamicdifficulty");
+      this.broadcastChat = cfg.getBoolean("dynamic-difficulty.broadcast-chat", false);
 
       this.broadcastEscalate = cfg.getString(
          "dynamic-difficulty.announcement.escalate",
@@ -208,12 +210,13 @@ public final class DynamicDifficultyManager implements Listener {
                      s.difficulty = nextDiff;
                      this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
 
-                     if (this.broadcastEscalate != null && !this.broadcastEscalate.isEmpty()) {
+                     if (this.broadcastChat && this.broadcastEscalate != null && !this.broadcastEscalate.isEmpty()) {
                         String msg = this.broadcastEscalate
                            .replace("{player}", p.getName())
                            .replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));
                         Bukkit.broadcast(Util.mini(msg));
                      }
+                     p.sendMessage(Util.mini("<red>⚡ Пассивность распаляет зло! Сложность Луны возросла до <yellow>x" + String.format(Locale.ROOT, "%.2f", nextDiff) + "</yellow>!</red>"));
 
                      w.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 0.5F, 1.2F);
                      w.spawnParticle(Particle.SOUL_FIRE_FLAME, p.getLocation().clone().add(0, 1, 0), 30, 0.8, 0.8, 0.8, 0.05);
@@ -249,7 +252,7 @@ public final class DynamicDifficultyManager implements Listener {
                s.difficulty = nextDiff;
                this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
 
-               if (this.broadcastDecay != null && !this.broadcastDecay.isEmpty()) {
+               if (this.broadcastChat && this.broadcastDecay != null && !this.broadcastDecay.isEmpty()) {
                   String msg = this.broadcastDecay.replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));
                   Bukkit.broadcast(Util.mini(msg));
                }

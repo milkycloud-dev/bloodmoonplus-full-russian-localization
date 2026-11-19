@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.7 (2026-11-19)
+
+- **Chat Spam Reduction During Blood Moon:**
+  - **Horde Wave Alerts:** Set default `announce.horde: false`. When a horde targets a player, an Actionbar alert (`⚡ Орда нападает на вас! ⚡`) and ravager roar sound are delivered directly and personally to that player, eliminating global chat spam.
+  - **Dynamic Difficulty Broadcast Throttling:** Added `dynamic-difficulty.broadcast-chat: false` (default `false`). When difficulty increases due to camping or decays from combat, the camping player is notified directly via Actionbar and personal chat message without spamming everyone in global chat.
+  - **Dimension & Elytra Wrath Direct Messaging:** Added `broadcast-chat: false` (default `false`) in both `dimension-wrath` and `elytra-wrath`. Repeated 30-second penalty warnings are sent directly to the offending player in Nether, End, or the sky, preserving global chat clarity until their eventual death.
+- **Blood Moon Player Death Broadcasting:**
+  - Enabled `announce.player-deaths: true` by default.
+  - In `EventListener.onPlayerDeath`: When a player dies during Blood Moon, strikes lightning, plays deep thunder sound (`Sound.ENTITY_LIGHTNING_BOLT_THUNDER`), sends Actionbar alert to all players in that world (`☠ <player> погиб во время Кровавой Луны!`), and broadcasts atmospheric event death message in chat with cleaned cause description (`☠ <player> пал во время Кровавой Луны! (<cause>)`), replacing redundant vanilla death messages (`e.deathMessage(null)`).
+- **Tiered Loot Drop Highlights:**
+  - **Epic (`EPICO`):** Enabled `broadcast: true` in `loot.yml`. Broadcasts a clean, simple line in chat (`✦ <player> получил эпический предмет: <item>`) with a subtle pickup sound.
+  - **Legendary (`LEGENDARIO`):** Prominent gold announcement in chat (`★ ЛЕГЕНДАРНЫЙ ДРОП: <player> выбил реликвию <item>!`), toast sound, personal Actionbar alert, and golden totem particle burst (`Particle.TOTEM_OF_UNDYING`).
+  - **Mythic (`MITICO`):** Major gradient banner in chat (`⚡ МИФИЧЕСКИЙ АРТЕФАКТ ⚡ <player> пробудил древнюю реликвию: <item>!`), resonant bell chime and toast challenge sounds, personal on-screen Title and Actionbar, and particle explosion (`Particle.PORTAL` + `Particle.SOUL_FIRE_FLAME`).
+
 ## 1.0.6 (2026-11-19)
 
 - **Dynamic Wither Control & WorldGuard Synchronization (`WitherControlManager`):**

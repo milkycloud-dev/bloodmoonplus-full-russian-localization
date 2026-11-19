@@ -13,6 +13,7 @@ rarities:
     display: <light_purple>Эпический
     weight: 40
     luck-affected: true
+    broadcast: true
     pity-per-roll: 0.02
     pity-max-stacks: 150
   LEGENDARIO:

@@ -1,6 +1,7 @@
 package dev.bloodmoonplus;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,8 +13,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
@@ -262,17 +267,69 @@ public final class LootManager {
                   return null;
                } else {
                   LootManager.Rarity ra = this.rarities.get(chosen);
-                  if (ra != null && ra.broadcast() && player != null && this.plugin.messages().announce("loot", true)) {
-                     this.plugin
-                        .messages()
-                        .all("loot.broadcast", "player", player.getName(), "item", d.name() != null ? d.name() : d.material().name(), "rarity", ra.display());
-                     player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F);
-                  }
+                  this.broadcastLoot(player, d, ra, chosen);
 
                   return stack;
                }
             }
          }
+      }
+   }
+
+   private void broadcastLoot(Player player, ItemFactory.ItemDef d, LootManager.Rarity ra, String rarityId) {
+      if (player == null || ra == null || !ra.broadcast() || !this.plugin.messages().announce("loot", true)) {
+         return;
+      }
+      String itemName = d.name() != null ? d.name() : d.material().name();
+      String rid = rarityId != null ? rarityId.toUpperCase(Locale.ROOT) : "";
+      Location loc = player.getLocation();
+      World w = player.getWorld();
+
+      if (rid.equals("MITICO") || rid.equals("MYTHIC")) {
+         String msg = this.plugin.messages().raw("loot.broadcast-mythic");
+         if (msg != null && !msg.isEmpty() && !msg.equals("loot.broadcast-mythic")) {
+            this.plugin.messages().all("loot.broadcast-mythic", "player", player.getName(), "item", itemName, "rarity", ra.display());
+         } else {
+            this.plugin.messages().allDirect("<gradient:#ff0055:#aa00ff><bold>⚡ МИФИЧЕСКИЙ АРТЕФАКТ ⚡</bold></gradient> <white><bold>" + player.getName() + "</bold></white> <light_purple>пробудил древнюю реликвию:</light_purple> " + itemName + "<light_purple>!</light_purple>");
+         }
+
+         w.playSound(loc, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.5F, 0.8F);
+         w.playSound(loc, Sound.BLOCK_BELL_RESONATE, 1.2F, 0.6F);
+
+         player.showTitle(Title.title(
+            Util.mini("<gradient:#ff0055:#aa00ff><bold>⚡ МИФИЧЕСКИЙ ДРОП ⚡</bold></gradient>"),
+            Util.mini(itemName),
+            Times.times(Duration.ofMillis(300L), Duration.ofMillis(2500L), Duration.ofMillis(500L))
+         ));
+         player.sendActionBar(Util.mini("<gradient:#ff0055:#aa00ff><bold>⚡ Древняя реликвия пробуждена! ⚡</bold></gradient>"));
+
+         w.spawnParticle(Particle.PORTAL, loc.clone().add(0, 1, 0), 60, 0.8, 1.0, 0.8, 0.1);
+         w.spawnParticle(Particle.SOUL_FIRE_FLAME, loc.clone().add(0, 1, 0), 40, 0.5, 0.8, 0.5, 0.05);
+
+      } else if (rid.equals("LEGENDARIO") || rid.equals("LEGENDARY")) {
+         String msg = this.plugin.messages().raw("loot.broadcast-legendary");
+         if (msg != null && !msg.isEmpty() && !msg.equals("loot.broadcast-legendary")) {
+            this.plugin.messages().all("loot.broadcast-legendary", "player", player.getName(), "item", itemName, "rarity", ra.display());
+         } else {
+            this.plugin.messages().allDirect("<gold>★ <bold>ЛЕГЕНДАРНЫЙ ДРОП:</bold></gold> <white><bold>" + player.getName() + "</bold></white> <yellow>выбил реликвию</yellow> " + itemName + "<yellow>!</yellow>");
+         }
+
+         player.playSound(loc, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2F, 1.0F);
+         player.sendActionBar(Util.mini("<gold>★ <bold>ЛЕГЕНДАРНЫЙ ПРЕДМЕТ ПОЛУЧЕН!</bold> " + itemName + "</gold>"));
+         w.spawnParticle(Particle.TOTEM_OF_UNDYING, loc.clone().add(0, 1, 0), 35, 0.5, 0.8, 0.5, 0.3);
+
+      } else if (rid.equals("EPICO") || rid.equals("EPIC")) {
+         String msg = this.plugin.messages().raw("loot.broadcast-epic");
+         if (msg != null && !msg.isEmpty() && !msg.equals("loot.broadcast-epic")) {
+            this.plugin.messages().all("loot.broadcast-epic", "player", player.getName(), "item", itemName, "rarity", ra.display());
+         } else {
+            this.plugin.messages().allDirect("<light_purple>✦</light_purple> <white>" + player.getName() + "</white> <gray>получил эпический предмет:</gray> " + itemName);
+         }
+         player.playSound(loc, Sound.ENTITY_ITEM_PICKUP, 1.0F, 0.8F);
+
+      } else {
+         this.plugin.messages().all("loot.broadcast", "player", player.getName(), "item", itemName, "rarity", ra.display());
+         player.playSound(loc, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F);
       }
    }
 
