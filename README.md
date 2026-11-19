@@ -61,6 +61,27 @@ Because `legacyToMini()` explicitly checks for the section character `§` and im
 
 ---
 
+### Advanced Features (v1.0.5)
+
+- **Moon Variations (`blood`, `black`, `purple`)**:
+  - Classic Blood Moon, Black Moon (darkness, +50% mob stats/health, purple bossbar), and Purple Moon (astral particle effects, +30% stats, +25% speed).
+  - Quick triggers: `/luna black [duration] [diff] [world]`, `/luna purple`, `/luna blood`.
+- **Non-Destructive Overworld Bosses**:
+  - **Black Ender Dragon (`dragon_negro`)**: Aggressive hunting AI targeting Overworld players without destroying blocks.
+  - **Shadow Wither (`wither_sombra`)**: 3-headed targeting, multi-skull attacks, aerial flight pursuit hovering above targets, and explosion shockwaves (`EXPLODE` ability) with guaranteed **0 block destruction** (`blockList().clear()`, `setFire(false)`, cancelled block changes).
+  - **Standalone Boss Summoning**: `/luna boss <id> [world|player]` works anytime on command, even when Blood Moon is not active. Full Tab completion for boss IDs, players, and worlds.
+- **Dynamic Difficulty & Anti-Camping**:
+  - Escalates difficulty (+0.25x per 25s up to x5.0) and summons punitive hordes if players camp in bunkers or avoid combat for > 45s.
+  - Dimension Wrath (Nether & The End anti-camping) and Elytra Wrath (high altitude sky-gliding anti-cheat).
+- **Three Warning Levels & Atmospheric Countdown**:
+  - `/luna warn <time> [normal|dangerous|lethal] [moon_type] [start]` with gradient titles and sounds.
+  - Single-warning countdown mode (`countdown.periodic-alerts: false`) avoiding chat spam.
+- **Spectator Lockdown & OP Bypass**:
+  - Regular players cannot escape into Spectator mode during the event.
+  - OPs (`p.isOp()`) can switch to Spectator mode and are completely ignored by wrath and tracking systems.
+
+---
+
 ### Included Files
 
 - `locales/ru.yml`: All 105 locale keys translated (actionbar notifications, boss spawns, lunar phases, admin commands).
@@ -124,6 +145,27 @@ public static String legacyToMini(String str) {
 #### Как это исправлено
 1. **Перевод на теги MiniMessage**: В `items.yml` все 29 вхождений устаревшего кода `&7` заменены на нативный тег `<gray>...</gray>`.
 2. **Пересборка бинарного пакета**: Исправленный файл `items.yml` зашит внутрь jar-архива `BloodMoonPlus-1.0.1-RU.jar`. При первой инициализации или восстановлении файлов плагин создает корректную конфигурацию без артефактов.
+
+---
+
+### Расширенные механики и возможности (v1.0.5)
+
+- **Разновидности Луны (`blood`, `black`, `purple`)**:
+  - Классическая Кровавая Луна, Чёрная Луна (тьма, увеличенное на 50% здоровье и урон монстров, фиолетовый боссбар), Фиолетовая Луна (астральные частицы порталов и дыхания дракона, +30% характеристик, +25% скорости).
+  - Быстрый запуск: `/luna black [длительность] [сложность] [мир]`, `/luna purple`, `/luna blood` (с русскими алиасами `черная`, `фиолетовая`, `кровавая`).
+- **Безопасные для карты боссы в обычном мире**:
+  - **Чёрный Дракон Края (`dragon_negro`)**: Агрессивный дракон, охотящийся за игроками в обычном мире без разрушения блоков.
+  - **Теневой Исушитель (`wither_sombra`)**: 3 активные головы, залповый огонь черепами, активное преследование по воздуху и взрывная ударная волна (способность `EXPLODE`) со 100% гарантией **нулевого разрушения блоков** (очистка `blockList()`, отмена `EntityChangeBlockEvent`, запрет огня от взрывов).
+  - **Призыв боссов вне Кровавой Луны**: Команда `/luna boss <id> [мир|игрок]` работает в любое время, даже если луна не активна. Поддерживается полное автодополнение Tab для ID боссов, игроков и миров.
+- **Динамическая сложность и анти-кемпинг**:
+  - Увеличение сложности (+0.25x каждые 25 сек до x5.0) и призыв карательных орд при отсиживании в бункерах дольше 45 секунд.
+  - Кара измерений (Dimension Wrath в Незере и Крае) и Кара элитр (Elytra Wrath при парении на высоте выше Y=90).
+- **Три типа предупреждений и атмосферный таймер**:
+  - `/luna warn <время> [normal|dangerous|lethal] [тип_луны] [start]` с атмосферными градиентными оповещениями и звуками.
+  - Режим одиночного предупреждения (`countdown.periodic-alerts: false`) без спама в чат.
+- **Блокировка режима наблюдателя и иммунитет для OP**:
+  - Игроки не могут переходить в режим Spectator во время луны.
+  - Администраторы (OP) могут переходить в режим наблюдателя и полностью игнорируются мобами, боссами и системами кары.
 
 ---
 

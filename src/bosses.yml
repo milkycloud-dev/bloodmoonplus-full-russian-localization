@@ -176,7 +176,8 @@ bosses:
     bar-color: PURPLE
     bar-overlay: NOTCHED_12
     abilities:
-    - SKULL:7:4
+    - SKULL:5:4
+    - EXPLODE:10:10:12
     - PULL:16:20:1.6
     - AURA:12:16:wither:8:1
     - SUMMON:20:4:WITHER_SKELETON
@@ -219,10 +220,11 @@ bosses:
     bar-color: PURPLE
     bar-overlay: NOTCHED_12
     abilities:
-    - SKULL:6:4
+    - SKULL:4:4
+    - EXPLODE:8:9:10
+    - PULL:14:18:1.5
     - AURA:14:15:wither:8:1
     - SUMMON:25:3:WITHER_SKELETON
-    - PULL:18:18:1.5
     - SELF_HEAL:20:60
     enrage-at: 0.45
     enrage-cooldown: 0.55

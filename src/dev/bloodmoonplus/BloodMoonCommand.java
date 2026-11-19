@@ -7,7 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -211,7 +214,14 @@ public final class BloodMoonCommand implements TabExecutor {
             case "difficulty":
                return args.length == 2 ? filter(List.of("x1", "x2", "x3", "x5", "x10", "x50", "x100", "x500", "x1000"), cur) : filter(worlds, cur);
             case "boss":
-               return args.length == 2 ? filter(new ArrayList<>(this.plugin.bosses().ids()), cur) : filter(worlds, cur);
+               if (args.length == 2) {
+                  return filter(new ArrayList<>(this.plugin.bosses().ids()), cur);
+               } else if (args.length == 3) {
+                  List<String> opts = new ArrayList<>(worlds);
+                  opts.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
+                  return filter(opts, cur);
+               }
+               return List.of();
             case "horde":
                return filter(worlds, cur);
             case "killmobs":
@@ -665,25 +675,85 @@ public final class BloodMoonCommand implements TabExecutor {
    private void boss(CommandSender s, String[] a) {
       if (a.length < 1) {
          this.m().send(s, "cmd.usage-boss", "bosses", String.join(", ", this.plugin.bosses().ids()));
-      } else {
-         Collection<EventManager.Session> all = this.plugin.events().sessions();
-         if (all.isEmpty()) {
-            this.m().send(s, "event.not-active");
-         } else {
-            int spawned = 0;
+         return;
+      }
 
-            for (EventManager.Session ses : all) {
-               if (this.plugin.bosses().spawn(ses, a[0])) {
-                  spawned++;
-               }
-            }
+      String bossId = a[0];
+      if (!this.plugin.bosses().ids().contains(bossId)) {
+         this.m().send(s, "cmd.boss-failed", "boss", bossId);
+         return;
+      }
 
-            if (spawned > 0) {
-               this.m().send(s, "cmd.boss-spawned", "boss", a[0]);
-            } else {
-               this.m().send(s, "cmd.boss-failed", "boss", a[0]);
+      Collection<EventManager.Session> all = this.plugin.events().sessions();
+      if (!all.isEmpty() && a.length < 2) {
+         int spawned = 0;
+         for (EventManager.Session ses : all) {
+            if (this.plugin.bosses().spawn(ses, bossId)) {
+               spawned++;
             }
          }
+
+         if (spawned > 0) {
+            this.m().send(s, "cmd.boss-spawned", "boss", bossId);
+         } else {
+            this.m().send(s, "cmd.boss-failed", "boss", bossId);
+         }
+         return;
+      }
+
+      World targetWorld = null;
+      Player targetPlayer = null;
+      Location spawnLoc = null;
+
+      if (a.length > 1) {
+         Player pArg = Bukkit.getPlayer(a[1]);
+         if (pArg != null) {
+            targetPlayer = pArg;
+            targetWorld = pArg.getWorld();
+            spawnLoc = this.plugin.events().findSpawn(pArg.getLocation(), 8.0, 16.0);
+            if (spawnLoc == null) {
+               spawnLoc = pArg.getLocation().add(0.0, 1.0, 0.0);
+            }
+         } else {
+            World wArg = Bukkit.getWorld(a[1]);
+            if (wArg != null) {
+               targetWorld = wArg;
+            }
+         }
+      }
+
+      if (targetWorld == null) {
+         if (s instanceof Player p) {
+            targetWorld = p.getWorld();
+            targetPlayer = p;
+            spawnLoc = this.plugin.events().findSpawn(p.getLocation(), 8.0, 16.0);
+            if (spawnLoc == null) {
+               spawnLoc = p.getLocation().add(0.0, 1.0, 0.0);
+            }
+         } else {
+            targetWorld = Bukkit.getWorlds().get(0);
+         }
+      }
+
+      if (spawnLoc == null) {
+         List<Player> inWorld = targetWorld.getPlayers().stream()
+            .filter(pl -> pl.getGameMode() == GameMode.SURVIVAL || pl.getGameMode() == GameMode.ADVENTURE)
+            .toList();
+         if (!inWorld.isEmpty()) {
+            targetPlayer = inWorld.get(0);
+            spawnLoc = this.plugin.events().findSpawn(targetPlayer.getLocation(), 8.0, 16.0);
+            if (spawnLoc == null) {
+               spawnLoc = targetPlayer.getLocation().add(0.0, 1.0, 0.0);
+            }
+         } else {
+            spawnLoc = targetWorld.getSpawnLocation().add(0.0, 1.0, 0.0);
+         }
+      }
+
+      if (this.plugin.bosses().spawnAt(spawnLoc, bossId, 1.0, targetPlayer)) {
+         this.m().send(s, "cmd.boss-spawned", "boss", bossId);
+      } else {
+         this.m().send(s, "cmd.boss-failed", "boss", bossId);
       }
    }
 

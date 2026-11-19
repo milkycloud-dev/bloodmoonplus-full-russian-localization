@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.5 (2026-11-19)
+
+- **Standalone Boss Summoning Outside Blood Moon:**
+  - `/luna boss <id> [world|player]` now supports summoning bosses anytime on demand, even when Blood Moon is completely inactive.
+  - Added support for targeting specific players or worlds directly in the command.
+  - Tab completion now auto-completes boss IDs at argument 2, and online players or worlds at argument 3.
+- **Enhanced Non-Destructive Wither Boss (`wither_sombra`, `azote_carmesi`):**
+  - **Zero Block Destruction Guarantee:** Cancelled `EntityChangeBlockEvent` (prevents wither eating/breaking terrain), cleared `blockList()` with zero yield in `EntityExplodeEvent` and `BlockExplodeEvent`, and disabled explosion fires in `ExplosionPrimeEvent`.
+  - **Aggressive Aerial Pursuit:** Flying AI applies continuous vertical and horizontal vectors towards victims, hovering ~3.5 blocks above them.
+  - **Three-Headed Targeting:** Main head and both side heads (`Wither.Head.CENTER`, `LEFT`, `RIGHT`) simultaneously lock onto survival/adventure victims.
+  - **Multi-Skull Barrage:** Fires spread wither skulls at nearby players with zero explosion yield.
+  - **Explosion Shockwave (`EXPLODE` ability):** Powerful radial explosion with soul flames, custom sounds, and player knockback that deals zero block damage.
+  - **Survival/Adventure Targeting:** Admins in Survival mode can now engage and test bosses directly, while Spectator and Creative players remain untargetable.
+
 ## 1.0.4 (2026-11-18)
 
 - **Countdown Parser & Single Warning Logic:**

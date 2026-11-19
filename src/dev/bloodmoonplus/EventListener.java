@@ -19,6 +19,7 @@ import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
@@ -27,6 +28,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -94,8 +96,7 @@ public final class EventListener implements Listener {
    }
 
    @EventHandler(
-      priority = EventPriority.HIGHEST,
-      ignoreCancelled = true
+      priority = EventPriority.LOWEST
    )
    public void onMobExplode(EntityExplodeEvent e) {
       Entity ent = e.getEntity();
@@ -103,7 +104,9 @@ public final class EventListener implements Listener {
       boolean isBossOrSpecial = ent instanceof EnderDragon || ent instanceof Wither ||
                                 ent instanceof WitherSkull || ent instanceof DragonFireball ||
                                 src instanceof EnderDragon || src instanceof Wither ||
-                                this.plugin.bosses().isBoss(src) || this.plugin.bosses().isBoss(ent);
+                                this.plugin.bosses().isBoss(src) || this.plugin.bosses().isBoss(ent) ||
+                                (ent != null && ent.getScoreboardTags().contains("bloodmoon_boss")) ||
+                                (src != null && src.getScoreboardTags().contains("bloodmoon_boss"));
       if (isBossOrSpecial) {
          e.blockList().clear();
          e.setYield(0.0F);
@@ -119,16 +122,42 @@ public final class EventListener implements Listener {
    }
 
    @EventHandler(
-      priority = EventPriority.HIGHEST,
-      ignoreCancelled = true
+      priority = EventPriority.LOWEST
+   )
+   public void onExplosionPrime(ExplosionPrimeEvent e) {
+      Entity ent = e.getEntity();
+      Entity src = source(ent);
+      boolean isBossOrSpecial = ent instanceof EnderDragon || ent instanceof Wither ||
+                                ent instanceof WitherSkull || ent instanceof DragonFireball ||
+                                src instanceof EnderDragon || src instanceof Wither ||
+                                this.plugin.bosses().isBoss(src) || this.plugin.bosses().isBoss(ent) ||
+                                (ent != null && ent.getScoreboardTags().contains("bloodmoon_boss")) ||
+                                (src != null && src.getScoreboardTags().contains("bloodmoon_boss"));
+      if (isBossOrSpecial) {
+         e.setFire(false);
+      }
+   }
+
+   @EventHandler(
+      priority = EventPriority.LOWEST
+   )
+   public void onBlockExplode(BlockExplodeEvent e) {
+      if (this.plugin.events().protectTerrain()) {
+         e.blockList().clear();
+         e.setYield(0.0F);
+      }
+   }
+
+   @EventHandler(
+      priority = EventPriority.LOWEST
    )
    public void onEntityChangeBlock(EntityChangeBlockEvent e) {
       Entity ent = e.getEntity();
-      if (ent instanceof EnderDragon || ent instanceof Wither) {
+      if (ent instanceof EnderDragon || ent instanceof Wither || ent instanceof WitherSkull) {
          e.setCancelled(true);
          return;
       }
-      if (this.plugin.bosses().isBoss(ent) || ent.getScoreboardTags().contains("bloodmoon_boss")) {
+      if (this.plugin.bosses().isBoss(ent) || (ent != null && ent.getScoreboardTags().contains("bloodmoon_boss"))) {
          e.setCancelled(true);
          return;
       }
@@ -158,10 +187,10 @@ public final class EventListener implements Listener {
       ignoreCancelled = true
    )
    public void onEntityTarget(EntityTargetLivingEntityEvent e) {
-      if (e.getTarget() instanceof Player p && p.isOp()) {
-         Entity ent = e.getEntity();
-         if (EventManager.isTagged(ent) || this.plugin.bosses().isBoss(ent) || ent.getScoreboardTags().contains("bloodmoon_boss")) {
+      if (e.getTarget() instanceof Player p) {
+         if (p.getGameMode() == GameMode.SPECTATOR || p.getGameMode() == GameMode.CREATIVE) {
             e.setCancelled(true);
+            return;
          }
       }
    }

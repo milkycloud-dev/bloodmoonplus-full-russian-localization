@@ -212,8 +212,6 @@ public final class BossManager {
       if (d == null) {
          return false;
       } else {
-         WorldConfig wc = this.plugin.worldConfigs().get(s.world.getName());
-         WorldConfig.BossConfig bossCfg = wc.boss();
          List<Player> candidates = new ArrayList<>();
 
          for (Player p : s.world.getPlayers()) {
@@ -231,115 +229,136 @@ public final class BossManager {
                loc = target.getLocation();
             }
 
-            LivingEntity le = null;
-            if ("MYTHICMOBS".equals(bossCfg.mode()) && bossCfg.mythicEnabled() && this.plugin.mythic().isAvailable()) {
-               String mythicName = bossCfg.mythicInternalName();
-               if (!this.plugin.mythic().mobExists(mythicName)) {
-                  if (this.plugin.messages().announce("bosses", true)) {
-                     this.plugin.messages().world(s.world, "boss.mythic-not-found", "name", mythicName, "world", s.world.getName());
-                  }
-               } else {
-                  spawningBoss = true;
+            return this.spawnAt(loc, bossId, s.difficulty, target);
+         }
+      }
+   }
 
-                  try {
-                     le = this.plugin.mythic().spawn(mythicName, loc, s.difficulty);
-                  } finally {
-                     spawningBoss = false;
-                  }
+   public boolean spawnAt(Location loc, String bossId, double difficulty, Player target) {
+      BossManager.BossDef d = this.defs.get(bossId);
+      if (d == null || loc == null || loc.getWorld() == null) {
+         return false;
+      }
 
-                  if (le != null) {
-                     String display = this.plugin.mythic().getDisplayName(mythicName);
-                     le.customName(Util.mini(display));
-                     s.world.strikeLightningEffect(loc);
-                     if (this.plugin.messages().announce("bosses", true)) {
-                        this.plugin.messages().all("boss.spawn", "boss", display);
-                     }
+      World w = loc.getWorld();
+      WorldConfig wc = this.plugin.worldConfigs().get(w.getName());
+      WorldConfig.BossConfig bossCfg = wc != null ? wc.boss() : null;
 
-                     for (Player px : s.world.getPlayers()) {
-                        px.playSound(px.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 0.7F);
-                     }
+      LivingEntity le = null;
+      if (bossCfg != null && "MYTHICMOBS".equals(bossCfg.mode()) && bossCfg.mythicEnabled() && this.plugin.mythic().isAvailable()) {
+         String mythicName = bossCfg.mythicInternalName();
+         if (!this.plugin.mythic().mobExists(mythicName)) {
+            if (this.plugin.messages().announce("bosses", true)) {
+               this.plugin.messages().world(w, "boss.mythic-not-found", "name", mythicName, "world", w.getName());
+            }
+         } else {
+            spawningBoss = true;
 
-                     this.plugin.stats().recordBossSpawned();
-                  }
-               }
-
-               if (le == null && bossCfg.mythicFallback()) {
-                  if (this.plugin.messages().announce("bosses", true)) {
-                     this.plugin.messages().world(s.world, "boss.mythic-fallback", "world", s.world.getName());
-                  }
-               } else if (le == null) {
-                  return false;
-               }
+            try {
+               le = this.plugin.mythic().spawn(mythicName, loc, difficulty);
+            } finally {
+               spawningBoss = false;
             }
 
-            if ("NONE".equals(bossCfg.mode()) && le == null) {
+            if (le != null) {
+               String display = this.plugin.mythic().getDisplayName(mythicName);
+               le.customName(Util.mini(display));
+               w.strikeLightningEffect(loc);
                if (this.plugin.messages().announce("bosses", true)) {
-                  this.plugin.messages().world(s.world, "boss.disabled");
+                  this.plugin.messages().all("boss.spawn", "boss", display);
                }
 
-               return false;
-            } else {
-               if (le == null) {
-                  spawningBoss = true;
-
-                  try {
-                     le = this.plugin
-                        .events()
-                        .spawn(loc, d.type(), d.health(), d.damage(), d.speed(), d.name(), d.equipment(), 1.0, s.difficulty, null, target);
-                  } finally {
-                     spawningBoss = false;
-                  }
-
-                  if (le == null) {
-                     return false;
-                  }
-
-                  le.getPersistentDataContainer().set(Keys.BOSS, PersistentDataType.STRING, d.id());
-                  le.setCustomNameVisible(true);
-                  if (d.scale() > 0.0) {
-                     AttributeInstance sc = le.getAttribute(Attribute.SCALE);
-                     if (sc != null) {
-                        sc.setBaseValue(d.scale());
-                     }
-                  }
-
-                  if (d.knockbackRes() > 0.0) {
-                     AttributeInstance kb = le.getAttribute(Attribute.KNOCKBACK_RESISTANCE);
-                     if (kb != null) {
-                        kb.setBaseValue(Math.min(1.0, d.knockbackRes()));
-                     }
-                  }
-
-                  if (d.announce() && this.plugin.messages().announce("bosses", true)) {
-                     s.world.strikeLightningEffect(loc);
-                     this.plugin.messages().all("boss.spawn", "boss", d.name());
-
-                     for (Player px : s.world.getPlayers()) {
-                        px.playSound(px.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 0.7F);
-                     }
-
-                     this.plugin.stats().recordBossSpawned();
-                  }
-               } else {
-                  le.getPersistentDataContainer().set(Keys.BOSS, PersistentDataType.STRING, d.id());
-                  le.setCustomNameVisible(true);
+               for (Player px : w.getPlayers()) {
+                  px.playSound(px.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 0.7F);
                }
 
-               if (le instanceof org.bukkit.entity.EnderDragon dragon) {
-                  dragon.setPodium(loc);
-                  dragon.setPhase(org.bukkit.entity.EnderDragon.Phase.CHARGE_PLAYER);
-                  if (target != null) {
-                     dragon.setTarget(target);
-                     dragon.setPodium(target.getLocation());
-                  }
-               }
+               this.plugin.stats().recordBossSpawned();
+            }
+         }
 
-               le.addScoreboardTag("bloodmoon_boss");
-               this.alive.put(le.getUniqueId(), new BossManager.Instance(le.getUniqueId(), d, s.difficulty, s.world));
-               return true;
+         if (le == null && bossCfg.mythicFallback()) {
+            if (this.plugin.messages().announce("bosses", true)) {
+               this.plugin.messages().world(w, "boss.mythic-fallback", "world", w.getName());
+            }
+         } else if (le == null) {
+            return false;
+         }
+      }
+
+      if (bossCfg != null && "NONE".equals(bossCfg.mode()) && le == null) {
+         if (this.plugin.messages().announce("bosses", true)) {
+            this.plugin.messages().world(w, "boss.disabled");
+         }
+
+         return false;
+      }
+
+      if (le == null) {
+         spawningBoss = true;
+
+         try {
+            le = this.plugin
+               .events()
+               .spawn(loc, d.type(), d.health(), d.damage(), d.speed(), d.name(), d.equipment(), 1.0, difficulty, null, target);
+         } finally {
+            spawningBoss = false;
+         }
+
+         if (le == null) {
+            return false;
+         }
+
+         le.getPersistentDataContainer().set(Keys.BOSS, PersistentDataType.STRING, d.id());
+         le.setCustomNameVisible(true);
+         if (d.scale() > 0.0) {
+            AttributeInstance sc = le.getAttribute(Attribute.SCALE);
+            if (sc != null) {
+               sc.setBaseValue(d.scale());
+            }
+         }
+
+         if (d.knockbackRes() > 0.0) {
+            AttributeInstance kb = le.getAttribute(Attribute.KNOCKBACK_RESISTANCE);
+            if (kb != null) {
+               kb.setBaseValue(Math.min(1.0, d.knockbackRes()));
+            }
+         }
+
+         if (d.announce() && this.plugin.messages().announce("bosses", true)) {
+            w.strikeLightningEffect(loc);
+            this.plugin.messages().all("boss.spawn", "boss", d.name());
+
+            for (Player px : w.getPlayers()) {
+               px.playSound(px.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 0.7F);
+            }
+
+            this.plugin.stats().recordBossSpawned();
+         }
+      } else {
+         le.getPersistentDataContainer().set(Keys.BOSS, PersistentDataType.STRING, d.id());
+         le.setCustomNameVisible(true);
+      }
+
+      if (le instanceof org.bukkit.entity.EnderDragon dragon) {
+         dragon.setPodium(loc);
+         dragon.setPhase(org.bukkit.entity.EnderDragon.Phase.CHARGE_PLAYER);
+         if (target != null) {
+            dragon.setTarget(target);
+            dragon.setPodium(target.getLocation());
+         }
+      } else if (le instanceof org.bukkit.entity.Wither wither) {
+         wither.setInvulnerableTicks(20);
+         if (target != null) {
+            wither.setTarget(target);
+            for (org.bukkit.entity.Wither.Head head : org.bukkit.entity.Wither.Head.values()) {
+               wither.setTarget(head, target);
             }
          }
       }
+
+      le.addScoreboardTag("bloodmoon_boss");
+      this.alive.put(le.getUniqueId(), new BossManager.Instance(le.getUniqueId(), d, difficulty, w));
+      return true;
    }
 
    void tick() {
@@ -376,8 +395,22 @@ public final class BossManager {
                }
             } else if (le instanceof org.bukkit.entity.Wither wither) {
                Player victim = this.findNearestVictim(le, 64.0);
-               if (victim != null && (wither.getTarget() == null || !wither.getTarget().isValid())) {
+               if (victim != null) {
                   wither.setTarget(victim);
+                  for (org.bukkit.entity.Wither.Head head : org.bukkit.entity.Wither.Head.values()) {
+                     wither.setTarget(head, victim);
+                  }
+                  Location bLoc = wither.getLocation();
+                  Location vLoc = victim.getLocation();
+                  double distSq = bLoc.distanceSquared(vLoc);
+                  if (distSq > 16.0) {
+                     Location targetHover = vLoc.clone().add(0.0, 3.5, 0.0);
+                     Vector toPlayer = targetHover.toVector().subtract(bLoc.toVector());
+                     if (toPlayer.lengthSquared() > 0.01) {
+                        Vector flyVel = toPlayer.normalize().multiply(0.45);
+                        wither.setVelocity(flyVel);
+                     }
+                  }
                }
             }
 
@@ -428,7 +461,6 @@ public final class BossManager {
       for (Player p : boss.getWorld().getPlayers()) {
          if ((p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE)
             && !p.isDead()
-            && !p.isOp()
             && p.getLocation().distanceSquared(boss.getLocation()) <= radius * radius) {
             out.add(p);
          }
@@ -443,8 +475,7 @@ public final class BossManager {
       Location loc = boss.getLocation();
       for (Player p : boss.getWorld().getPlayers()) {
          if ((p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE)
-            && !p.isDead()
-            && !p.isOp()) {
+            && !p.isDead()) {
             double d2 = p.getLocation().distanceSquared(loc);
             if (d2 <= minD2) {
                minD2 = d2;
@@ -594,24 +625,43 @@ public final class BossManager {
                return true;
             case "SKULL":
                int countSkull = (int)arg(a, 0, 3.0);
-               Collections.shuffle(near);
                int firedSkull = 0;
 
-               for (int i = 0; i < Math.min(countSkull, near.size()); i++) {
-                  Player p = near.get(i);
-                  Vector dir = p.getLocation().add(0.0, 1.0, 0.0).toVector().subtract(boss.getLocation().add(0.0, 1.5, 0.0).toVector());
+               for (int i = 0; i < countSkull; i++) {
+                  Player p = near.get(i % near.size());
+                  Location targetPos = p.getLocation().add(0.0, 1.0, 0.0);
+                  if (i > 0) {
+                     targetPos.add((rnd.nextDouble() - 0.5) * 1.5, (rnd.nextDouble() - 0.5) * 0.8, (rnd.nextDouble() - 0.5) * 1.5);
+                  }
+                  Vector dir = targetPos.toVector().subtract(boss.getLocation().add(0.0, 1.5, 0.0).toVector());
                   if (!(dir.lengthSquared() < 0.01)) {
                      WitherSkull ws = (WitherSkull)w.spawn(boss.getLocation().add(0.0, 1.5, 0.0), WitherSkull.class);
                      ws.setShooter(boss);
                      ws.setDirection(dir.normalize().multiply(1.2));
-                     ws.setCharged(true);
-                     ws.setYield(1.0F);
+                     ws.setCharged(i == 0 || rnd.nextBoolean());
+                     ws.setYield(0.0F);
                      firedSkull++;
                   }
                }
 
                w.playSound(boss.getLocation(), Sound.ENTITY_WITHER_SHOOT, 1.5F, 0.8F);
                return firedSkull > 0;
+            case "EXPLODE":
+               double radiusExp = arg(a, 0, 8.0);
+               double dmgExp = arg(a, 1, 10.0);
+               Location expLoc = boss.getLocation().add(0.0, 1.0, 0.0);
+               w.spawnParticle(Particle.EXPLOSION_EMITTER, expLoc, 2);
+               w.spawnParticle(Particle.SOUL_FIRE_FLAME, expLoc, 80, 1.5, 1.5, 1.5, 0.1);
+               w.playSound(expLoc, Sound.ENTITY_GENERIC_EXPLODE, 2.0F, 0.7F);
+               w.playSound(expLoc, Sound.ENTITY_WITHER_DEATH, 1.5F, 0.8F);
+               for (Player px : this.nearbyPlayers(boss, radiusExp)) {
+                  px.damage(dmgExp * em, boss);
+                  Vector away = px.getLocation().toVector().subtract(boss.getLocation().toVector()).setY(0.4);
+                  if (away.lengthSquared() > 0.01) {
+                     px.setVelocity(away.normalize().multiply(1.5));
+                  }
+               }
+               return true;
             case "CHARGE":
                double powerCharge = arg(a, 0, 1.4);
                double dmgCharge = arg(a, 1, 9.0);
