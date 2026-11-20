@@ -1,3 +1,9 @@
+## 1.0.8 (2026-11-20), localization fixes
+
+- Restored the ability summary line and the `Владелец: {owner}` line in the lore of 23 items.
+- `plugin.yml` descriptions and the world template survivor message are now Russian.
+- Root and `src` copies of `items.yml`, `loot.yml` and `messages.yml` match the files deployed on the server.
+
 # Changelog
 
 ## 1.0.9 (2026-11-20)
