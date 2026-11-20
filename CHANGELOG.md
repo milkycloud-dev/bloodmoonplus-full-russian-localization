@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.8 (2026-11-20)
+
+- Fixed `EpicEffectsManager`: world border size 59999996 exceeded the 59999968 limit and threw every second during epic moons; red vignette, spores and fireworks now run.
+- Fixed `DRAGON_BREATH` particles in `DimensionWrathManager` and purple moon start: 26.x requires Float data. Purple moon start no longer aborts before quit penalty, wither control, spectator kick, start commands and boss planning.
+- `config.yml`: `wither-control` moved out of the middle of `event`, so `reward-on-stop`, `commands-on-*`, `survivor-commands` and `start-announcement` are read again; removed stray duplicate `horde: 0.20`.
+- Resumed sessions after restart or reload now unlock the wither in WorldGuard and keep their moon type (`active.<world>.type` in `data.yml`).
+- WorldGuard sync keeps other mobs listed in `wither-control.keep-deny-spawn` instead of clearing the whole `deny-spawn` flag.
+- Player-built withers during the moon are no longer force-uncancelled, so region protections and other plugins still apply. Bosses still spawn.
+- `BlockExplodeEvent` terrain protection now applies only while the moon is active in that world; `EntityChangeBlockEvent` protection only to moon mobs, so falling blocks, villagers and farmland work normally.
+- Bosses stay tracked while their chunk is unloaded; untracked boss entities are removed when their chunk loads.
+- Death cause and mob names are escaped before MiniMessage parsing (no tag injection through renamed items or name tags).
+- Locale files fall back to the bundled jar copy for missing keys; loot and death fallbacks detect missing keys correctly.
+
 ## 1.0.7 (2026-11-19)
 
 - **Chat Spam Reduction During Blood Moon:**

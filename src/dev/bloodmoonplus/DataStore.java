@@ -139,7 +139,7 @@ public final class DataStore {
       }
    }
 
-   void saveActive(String world, long start, long end, double diff) {
+   void saveActive(String world, long start, long end, double diff, MoonType type) {
       this.lock.lock();
 
       try {
@@ -147,6 +147,7 @@ public final class DataStore {
          this.cfg.set(b + ".start", start);
          this.cfg.set(b + ".end", end);
          this.cfg.set(b + ".difficulty", diff);
+         this.cfg.set(b + ".type", (type != null ? type : MoonType.BLOOD).getId());
          this.dirty = true;
       } finally {
          this.lock.unlock();

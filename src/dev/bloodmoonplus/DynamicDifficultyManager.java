@@ -134,7 +134,7 @@ public final class DynamicDifficultyManager implements Listener {
       if (s != null) {
          double base = this.baseDifficultyPerWorld.getOrDefault(worldName, 1.0);
          s.difficulty = base;
-         this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+         this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
       }
    }
 
@@ -208,7 +208,7 @@ public final class DynamicDifficultyManager implements Listener {
                   if (curDiff < this.maxDifficulty) {
                      double nextDiff = Math.min(this.maxDifficulty, Math.round((curDiff + this.difficultyStep) * 100.0) / 100.0);
                      s.difficulty = nextDiff;
-                     this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+                     this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
 
                      if (this.broadcastChat && this.broadcastEscalate != null && !this.broadcastEscalate.isEmpty()) {
                         String msg = this.broadcastEscalate
@@ -250,7 +250,7 @@ public final class DynamicDifficultyManager implements Listener {
             double nextDiff = Math.max(base, Math.round((s.difficulty - this.decayStep) * 100.0) / 100.0);
             if (nextDiff < s.difficulty) {
                s.difficulty = nextDiff;
-               this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+               this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
 
                if (this.broadcastChat && this.broadcastDecay != null && !this.broadcastDecay.isEmpty()) {
                   String msg = this.broadcastDecay.replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));

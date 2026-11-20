@@ -3,6 +3,9 @@ package dev.bloodmoonplus.i18n;
 import dev.bloodmoonplus.BloodMoonPlus;
 import dev.bloodmoonplus.Util;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -44,7 +47,23 @@ public final class LocaleManager {
       this.useBundled = cfg.getBoolean("UseBundledLocales", true);
       this.active = YamlConfiguration.loadConfiguration(new File(this.localesDir, this.language + ".yml"));
       this.fallback = YamlConfiguration.loadConfiguration(new File(this.localesDir, "en.yml"));
+      this.attachBundled(this.active, this.language);
+      this.attachBundled(this.fallback, "en");
       this.plugin.getLogger().info("Idioma activo: " + this.language);
+   }
+
+   private void attachBundled(YamlConfiguration target, String lang) {
+      try (InputStream in = this.plugin.getResource("locales/" + lang + ".yml")) {
+         if (in != null) {
+            target.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8)));
+         }
+      } catch (Exception ex) {
+         this.plugin.getLogger().warning("Locale " + lang + ": " + ex.getMessage());
+      }
+   }
+
+   public boolean has(String key) {
+      return this.active.getString(key) != null || this.useBundled && this.fallback.getString(key) != null;
    }
 
    public String get(String key) {

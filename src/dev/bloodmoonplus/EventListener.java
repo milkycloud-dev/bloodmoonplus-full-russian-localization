@@ -32,6 +32,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -103,8 +104,6 @@ public final class EventListener implements Listener {
                      p.sendMessage(this.plugin.messages().prefixed("event.wither-only-bloodmoon"));
                   }
                }
-            } else {
-               e.setCancelled(false);
             }
             return;
          }
@@ -168,7 +167,7 @@ public final class EventListener implements Listener {
       priority = EventPriority.LOWEST
    )
    public void onBlockExplode(BlockExplodeEvent e) {
-      if (this.plugin.events().protectTerrain()) {
+      if (this.plugin.events().protectTerrain() && this.plugin.events().isActive(e.getBlock().getWorld())) {
          e.blockList().clear();
          e.setYield(0.0F);
       }
@@ -187,7 +186,7 @@ public final class EventListener implements Listener {
          e.setCancelled(true);
          return;
       }
-      if (this.plugin.events().protectTerrain()) {
+      if (this.plugin.events().protectTerrain() && EventManager.isTagged(ent)) {
          World w = e.getBlock().getWorld();
          if (w != null && this.plugin.events().isActive(w)) {
             e.setCancelled(true);
@@ -312,11 +311,14 @@ public final class EventListener implements Listener {
                cause = this.plugin.locales().get("event.death-cause-unknown");
             }
 
+            if (rawCause != null && !rawCause.trim().isEmpty()) {
+               cause = Util.MM.escapeTags(cause.replace('§', '&'));
+            }
             e.deathMessage(null);
             this.plugin.messages().all("event.player-died", "player", p.getName(), "cause", cause);
 
             String actionbarText = this.plugin.locales().get("event.player-died-actionbar", "player", p.getName());
-            if (actionbarText == null || actionbarText.isEmpty() || actionbarText.equals("event.player-died-actionbar")) {
+            if (!this.plugin.locales().has("event.player-died-actionbar")) {
                actionbarText = "<dark_red>☠ <white>" + p.getName() + "</white> погиб во время Кровавой Луны!</dark_red>";
             }
             Component abComp = Util.mini(actionbarText);
@@ -342,11 +344,18 @@ public final class EventListener implements Listener {
                      String mobName = e.getEntity().customName() != null
                         ? PlainTextComponentSerializer.plainText().serialize(e.getEntity().customName())
                         : e.getEntity().getType().name().toLowerCase().replace('_', ' ');
-                     this.plugin.messages().all("event.mob-slain", "player", killer.getName(), "mob", mobName);
+                     this.plugin.messages().all("event.mob-slain", "player", killer.getName(), "mob", Util.MM.escapeTags(mobName.replace('§', '&')));
                   }
                }
             }
          }
+      }
+   }
+
+   @EventHandler
+   public void onEntitiesLoad(EntitiesLoadEvent e) {
+      for (Entity ent : e.getEntities()) {
+         this.plugin.bosses().dropOrphan(ent);
       }
    }
 

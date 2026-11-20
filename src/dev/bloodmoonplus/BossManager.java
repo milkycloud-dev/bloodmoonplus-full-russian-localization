@@ -357,7 +357,9 @@ public final class BossManager {
       }
 
       le.addScoreboardTag("bloodmoon_boss");
-      this.alive.put(le.getUniqueId(), new BossManager.Instance(le.getUniqueId(), d, difficulty, w));
+      BossManager.Instance inst = new BossManager.Instance(le.getUniqueId(), d, difficulty, w);
+      inst.lastLoc = le.getLocation();
+      this.alive.put(le.getUniqueId(), inst);
       return true;
    }
 
@@ -367,7 +369,14 @@ public final class BossManager {
 
       while (it.hasNext()) {
          BossManager.Instance bi = it.next();
-         if (Bukkit.getEntity(bi.id) instanceof LivingEntity le && !le.isDead() && le.isValid()) {
+         Entity raw = Bukkit.getEntity(bi.id);
+         if (raw == null && bi.lastLoc != null && bi.lastLoc.getWorld() != null && !bi.lastLoc.isChunkLoaded()) {
+            this.hideBar(bi);
+            continue;
+         }
+
+         if (raw instanceof LivingEntity le && !le.isDead() && le.isValid()) {
+            bi.lastLoc = le.getLocation();
             double frac = Math.max(0.0, Math.min(1.0, le.getHealth() / Util.maxHealth(le)));
             bi.bar.progress((float)frac);
 
@@ -848,6 +857,14 @@ public final class BossManager {
       return n;
    }
 
+   public void dropOrphan(Entity ent) {
+      if (ent instanceof LivingEntity
+         && ent.getPersistentDataContainer().has(Keys.BOSS, PersistentDataType.STRING)
+         && !this.alive.containsKey(ent.getUniqueId())) {
+         ent.remove();
+      }
+   }
+
    public long defeatedCount() {
       return this.defeatedCount;
    }
@@ -899,6 +916,7 @@ public final class BossManager {
       final Map<UUID, Double> damage = new HashMap<>();
       final long[] nextUse;
       boolean enraged = false;
+      Location lastLoc;
 
       Instance(UUID id, BossManager.BossDef def, double diff, World world) {
          this.id = id;

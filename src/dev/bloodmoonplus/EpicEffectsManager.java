@@ -190,7 +190,7 @@ public final class EpicEffectsManager implements Listener {
                   p.setWorldBorder(wb);
                }
                wb.setCenter(p.getLocation());
-               wb.setSize(59999996.0);
+               wb.setSize(59999968.0);
                wb.setWarningDistance(2147483647);
                wb.setDamageAmount(0.0);
                wb.setDamageBuffer(2147483647.0);

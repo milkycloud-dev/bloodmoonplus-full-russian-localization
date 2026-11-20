@@ -1,5 +1,6 @@
 package dev.bloodmoonplus;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ public final class WitherControlManager {
    private boolean allowOnlyDuringBloodMoon = true;
    private boolean syncWorldGuard = true;
    private final Set<String> controlledWorlds = new HashSet<>();
+   private final List<String> otherDenySpawn = new ArrayList<>();
 
    WitherControlManager(BloodMoonPlus plugin) {
       this.plugin = plugin;
@@ -23,6 +25,13 @@ public final class WitherControlManager {
       this.enabled = cfg.getBoolean("wither-control.enabled", true);
       this.allowOnlyDuringBloodMoon = cfg.getBoolean("wither-control.allow-only-during-bloodmoon", true);
       this.syncWorldGuard = cfg.getBoolean("wither-control.sync-worldguard", true);
+
+      this.otherDenySpawn.clear();
+      for (String s : cfg.getStringList("wither-control.keep-deny-spawn")) {
+         if (s != null && !s.trim().isEmpty() && !s.trim().equalsIgnoreCase("minecraft:wither") && !s.trim().equalsIgnoreCase("wither")) {
+            this.otherDenySpawn.add(s.trim());
+         }
+      }
 
       this.controlledWorlds.clear();
       List<String> list = cfg.getStringList("wither-control.worlds");
@@ -112,11 +121,14 @@ public final class WitherControlManager {
 
    private void setWorldGuardDenySpawn(World w, boolean deny) {
       try {
-         String cmd;
+         List<String> values = new ArrayList<>();
          if (deny) {
-            cmd = "rg flag __global__ -w " + w.getName() + " deny-spawn minecraft:wither";
-         } else {
-            cmd = "rg flag __global__ -w " + w.getName() + " deny-spawn";
+            values.add("minecraft:wither");
+         }
+         values.addAll(this.otherDenySpawn);
+         String cmd = "rg flag __global__ -w " + w.getName() + " deny-spawn";
+         if (!values.isEmpty()) {
+            cmd = cmd + " " + String.join(",", values);
          }
          Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
       } catch (Exception ex) {

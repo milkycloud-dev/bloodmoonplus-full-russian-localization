@@ -151,6 +151,19 @@ event:
     # Сообщение в чат с параметрами
     chat-with-params: "<red><bold>🌙 Кровавая Луна началась!</bold> <gray>Сложность <red>x{difficulty}</red> · Длительность <white>{minutes} мин</white></gray>"
 
+# Управление Иссушителем: запрещен в мирное время, разрешен во время Кровавой Луны
+wither-control:
+  enabled: true
+  # Разрешать призыв и спавн Иссушителя ТОЛЬКО во время активной Кровавой Луны
+  allow-only-during-bloodmoon: true
+  # Автоматически снимать/возвращать флаг deny-spawn в WorldGuard для региона __global__
+  sync-worldguard: true
+  # Миры, для которых действует ограничение
+  worlds:
+    - world
+  # Другие мобы из deny-spawn региона __global__, которые должны оставаться запрещены всегда (кроме Иссушителя)
+  keep-deny-spawn: []
+
 # ------------------------------------------------------------
 #  УСТАНОВКА БЛОКОВ ВО ВРЕМЯ КРОВАВОЙ ЛУНЫ (BLOCK PLACEMENT)
 # ------------------------------------------------------------
@@ -231,6 +244,8 @@ dimension-wrath:
   strike-interval-seconds: 2
   # Урон за один удар (4.0 = 2 полных сердца, увеличено в 4 раза по сравнению со старым 1.0)
   damage: 4.0
+  # Транслировать ли предупреждения в общий чат (false = только личное сообщение нарушителю)
+  broadcast-chat: false
   # Интервал сообщений в общий чат (в секундах)
   broadcast-interval-seconds: 30
   # Освобождать ли игроков в креативе и спектаторе
@@ -264,6 +279,8 @@ elytra-wrath:
   damage: 4.0
   # Складывать ли крылья элитр (принудительно прерывать планирование)
   disrupt-flight: true
+  # Транслировать ли предупреждения в общий чат (false = только личное сообщение нарушителю)
+  broadcast-chat: false
   # Интервал сообщений в общий чат (в секундах)
   broadcast-interval-seconds: 30
   # Освобождать ли игроков в креативе и спектаторе
@@ -305,6 +322,8 @@ dynamic-difficulty:
   decay-step: 0.1
   # Освобождать ли игроков в креативе и спектаторе
   exempt-creative: true
+  # Транслировать ли изменения сложности в общий чат (false = без спама в чат, предупреждение только кемперу)
+  broadcast-chat: false
   bypass-permission: "bloodmoon.bypass.dynamicdifficulty"
   announcement:
     escalate: "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Трусость и пассивность выживших распаляют древнее зло! Сложность Луны возросла до <yellow>x{difficulty}</yellow>!</red>"
@@ -385,12 +404,12 @@ moon-types:
 #  Efectivo con /luna reload
 # ------------------------------------------------------------
 announce:
-  horde: true                 # "¡Las hordas descienden sobre <jugador>!"
-  bosses: true                # aparición de jefes, su caída y el top de daño
-  loot: true                  # drop LEGENDARIO / MÍTICO conseguido
-  mob-kills: false            # "Nova ha matado a Zombi Sanguinario" (1 de cada 5 muertes)
-  player-deaths: false        # "Nova ha muerto por <causa>"
-  event: true                # inicio, fin y resumen del evento
+  horde: false                # "Орда нападает на игрока" (false: личный Actionbar и рык атакуемому игроку без спама в чат)
+  bosses: true                # появление боссов, их падение и топ урона
+  loot: true                  # оповещение о выпадении эпических, легендарных и мифических наград
+  mob-kills: false            # оповещение об убийстве обычных мобов (1 из 5)
+  player-deaths: true         # оповещение о гибели игрока во время Кровавой Луны с раскатом грома
+  event: true                 # начало, конец и итоги события
   specials: false             # eclipse, tormenta, niebla, silencio
   survivors: true            # resultados de supervivientes
   warnings: true             # avisos 10/5/1 min antes de que empiece
@@ -519,8 +538,6 @@ difficulty:
     pyromancer:
       min-difficulty: 6.0 # Пиромант появляется только со сложности x6 и выше
       temp-fire: true     # автоматическое тушение огня и очистка при завершении луны
-
-horde: 0.20 # шанс спавна десантника, пироманта или арбалетчика в волне
 
 # ------------------------------------------------------------
 #  HORDAS

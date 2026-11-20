@@ -173,7 +173,7 @@ public final class DimensionWrathManager implements Listener {
             p.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.8F, isEnd ? 1.4F : 1.2F);
 
             if (isEnd) {
-               w.spawnParticle(Particle.DRAGON_BREATH, loc.clone().add(0.0, 1.0, 0.0), 20, 0.5, 0.5, 0.5, 0.08);
+               w.spawnParticle(Particle.DRAGON_BREATH, loc.clone().add(0.0, 1.0, 0.0), 20, 0.5, 0.5, 0.5, 0.08, 1.0F);
                w.spawnParticle(Particle.PORTAL, loc.clone().add(0.0, 1.0, 0.0), 25, 0.5, 0.5, 0.5, 0.1);
             } else {
                w.spawnParticle(Particle.FLAME, loc.clone().add(0.0, 1.0, 0.0), 15, 0.4, 0.4, 0.4, 0.06);

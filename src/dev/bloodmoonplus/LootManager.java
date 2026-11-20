@@ -286,8 +286,7 @@ public final class LootManager {
       World w = player.getWorld();
 
       if (rid.equals("MITICO") || rid.equals("MYTHIC")) {
-         String msg = this.plugin.messages().raw("loot.broadcast-mythic");
-         if (msg != null && !msg.isEmpty() && !msg.equals("loot.broadcast-mythic")) {
+         if (this.plugin.locales().has("loot.broadcast-mythic")) {
             this.plugin.messages().all("loot.broadcast-mythic", "player", player.getName(), "item", itemName, "rarity", ra.display());
          } else {
             this.plugin.messages().allDirect("<gradient:#ff0055:#aa00ff><bold>⚡ МИФИЧЕСКИЙ АРТЕФАКТ ⚡</bold></gradient> <white><bold>" + player.getName() + "</bold></white> <light_purple>пробудил древнюю реликвию:</light_purple> " + itemName + "<light_purple>!</light_purple>");
@@ -307,8 +306,7 @@ public final class LootManager {
          w.spawnParticle(Particle.SOUL_FIRE_FLAME, loc.clone().add(0, 1, 0), 40, 0.5, 0.8, 0.5, 0.05);
 
       } else if (rid.equals("LEGENDARIO") || rid.equals("LEGENDARY")) {
-         String msg = this.plugin.messages().raw("loot.broadcast-legendary");
-         if (msg != null && !msg.isEmpty() && !msg.equals("loot.broadcast-legendary")) {
+         if (this.plugin.locales().has("loot.broadcast-legendary")) {
             this.plugin.messages().all("loot.broadcast-legendary", "player", player.getName(), "item", itemName, "rarity", ra.display());
          } else {
             this.plugin.messages().allDirect("<gold>★ <bold>ЛЕГЕНДАРНЫЙ ДРОП:</bold></gold> <white><bold>" + player.getName() + "</bold></white> <yellow>выбил реликвию</yellow> " + itemName + "<yellow>!</yellow>");
@@ -319,8 +317,7 @@ public final class LootManager {
          w.spawnParticle(Particle.TOTEM_OF_UNDYING, loc.clone().add(0, 1, 0), 35, 0.5, 0.8, 0.5, 0.3);
 
       } else if (rid.equals("EPICO") || rid.equals("EPIC")) {
-         String msg = this.plugin.messages().raw("loot.broadcast-epic");
-         if (msg != null && !msg.isEmpty() && !msg.equals("loot.broadcast-epic")) {
+         if (this.plugin.locales().has("loot.broadcast-epic")) {
             this.plugin.messages().all("loot.broadcast-epic", "player", player.getName(), "item", itemName, "rarity", ra.display());
          } else {
             this.plugin.messages().allDirect("<light_purple>✦</light_purple> <white>" + player.getName() + "</white> <gray>получил эпический предмет:</gray> " + itemName);

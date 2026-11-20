@@ -303,7 +303,7 @@ public final class EventManager {
          double firstInterval = Math.max(minInterval, this.waveInterval / this.plugin.scaled(diff, "spawn-speed"));
          s.lastWaveMs = startMs + (long)(this.firstWaveDelay * 1000.0) - (long)(firstInterval * 1000.0);
          this.sessions.put(w.getName(), s);
-         this.plugin.data().saveActive(w.getName(), startMs, endMs, diff);
+         this.plugin.data().saveActive(w.getName(), startMs, endMs, diff, mt);
          if (this.lockNight) {
             this.setWorldTime(w, this.nightTime);
          }
@@ -355,7 +355,7 @@ public final class EventManager {
                for (Player p : w.getPlayers()) {
                   p.showTitle(t);
                   p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 1.1F);
-                  p.getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getLocation().add(0, 1, 0), 25, 1.0, 1.0, 1.0, 0.05);
+                  p.getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getLocation().add(0, 1, 0), 25, 1.0, 1.0, 1.0, 0.05, 1.0F);
                }
                if (announce) {
                   Bukkit.broadcast(Util.mini(chat));
@@ -408,11 +408,11 @@ public final class EventManager {
                this.plugin.spectatorBlock().kickAllSpectators(w);
             }
 
-            if (this.plugin.witherControl() != null) {
-               this.plugin.witherControl().onBloodMoonStart(w);
-            }
-
             this.runCommands(this.cmdStart, w, null);
+         }
+
+         if (this.plugin.witherControl() != null) {
+            this.plugin.witherControl().onBloodMoonStart(w);
          }
 
          this.plugin.bosses().plan(s, resumed);
@@ -447,13 +447,13 @@ public final class EventManager {
          EventManager.Session s = this.sessions.get(w.getName());
          if (s == null) return 0;
          s.endMs = Math.max(now + 2000L, s.endMs + deltaMs);
-         this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+         this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
          return 1;
       } else {
          int count = 0;
          for (EventManager.Session s : this.sessions.values()) {
             s.endMs = Math.max(now + 2000L, s.endMs + deltaMs);
-            this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+            this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
             count++;
          }
          return count;
@@ -466,13 +466,13 @@ public final class EventManager {
          EventManager.Session s = this.sessions.get(w.getName());
          if (s == null) return 0;
          s.endMs = Math.max(now + 2000L, now + remainingMs);
-         this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+         this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
          return 1;
       } else {
          int count = 0;
          for (EventManager.Session s : this.sessions.values()) {
             s.endMs = Math.max(now + 2000L, now + remainingMs);
-            this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty);
+            this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
             count++;
          }
          return count;
@@ -614,7 +614,7 @@ public final class EventManager {
             World w = Bukkit.getWorld(wn);
             long end = a.getLong(wn + ".end");
             if (w != null && end > now) {
-               if (this.startInternal(w, a.getDouble(wn + ".difficulty", 1.0), a.getLong(wn + ".start", now), end, true, false)) {
+               if (this.startInternal(w, a.getDouble(wn + ".difficulty", 1.0), a.getLong(wn + ".start", now), end, true, false, MoonType.fromString(a.getString(wn + ".type")))) {
                   this.plugin.getLogger().info("Evento retomado en '" + wn + "' (quedan " + Util.dur((end - now) / 1000L) + ").");
                }
             } else {
