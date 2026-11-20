@@ -1,21 +1,29 @@
-MIT License
+Proprietary License
 
-Copyright (c) 2026 milkycloud-dev
+Copyright (c) 2026 milkycloud-dev. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Rights
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+All rights to LunarWrath, including its source code, compiled builds, configuration templates, locale files, artwork and documentation (the "Software"), belong to milkycloud-dev, except for the third-party components listed in section 4. No rights are granted except those stated in this license.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Use of official releases
+
+You may download official release builds published at https://github.com/milkycloud-dev/lunar-wrath/releases and run them on Minecraft servers that you operate, including public and commercial servers. You may edit the configuration and locale files that the Software creates for your own server.
+
+You may not sell, sublicense, rehost or redistribute the Software or modified builds of it, and you may not remove or change this license or the copyright notices.
+
+3. Source code
+
+The source code is published for reading, review and security auditing. You may build it locally to verify that it matches the official releases. You may not publish, distribute or sell builds made from it, or use it as the base of another product, without written permission from milkycloud-dev.
+
+4. Third-party components
+
+LunarWrath is based on BloodMoonPlus 1.0.1. Rights to the original BloodMoonPlus code and assets remain with their respective authors; this license covers only the changes and additions made by milkycloud-dev. The repository also contains PlaceholderAPI (libs/PlaceholderAPI.jar) as a compile-time dependency, distributed under its own license. The Paper API is used at build time and is not included.
+
+5. No warranty
+
+The Software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the copyright holder be liable for any claim, damages, data loss or other liability arising from or in connection with the Software or its use.
+
+6. Termination
+
+This license ends automatically if you break any of its terms. After termination you must stop using the Software and delete all copies you control.

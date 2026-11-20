@@ -10,7 +10,7 @@ import java.util.Locale;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public final class LocaleManager {
-   public static final String VERSION = "1.0.1";
+   public static final String VERSION = "1.0.9";
    private final BloodMoonPlus plugin;
    private final File localesDir;
    private YamlConfiguration active = new YamlConfiguration();

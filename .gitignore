@@ -4,4 +4,5 @@ Thumbs.db
 *.tmp
 build/
 classes/
-!BloodMoonPlus-1.0.1-RU.jar
+!LunarWrath.jar
+deps/

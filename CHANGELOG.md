@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.9 (2026-11-20)
+
+- Project renamed to **LunarWrath** and moved to `milkycloud-dev/lunar-wrath`; it is no longer a translation of BloodMoonPlus but a separate plugin built on it.
+- Plugin id stays `BloodMoonPlus` (data folder, permissions, PlaceholderAPI prefix), so existing installs upgrade by swapping the jar.
+- `plugin.yml`: version 1.0.9, English description, author and website.
+- Build output renamed to `LunarWrath.jar`; release workflow builds the jar on every `v*` tag and publishes notes from this file.
+- New README (English and Russian), logo and proprietary license with credit to the original BloodMoonPlus.
+
 ## 1.0.8 (2026-11-20)
 
 - Fixed `EpicEffectsManager`: world border size 59999996 exceeded the 59999968 limit and threw every second during epic moons; red vignette, spores and fireworks now run.

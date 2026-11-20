@@ -1,0 +1,79 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Paper API
+        run: |
+          cat > deps-pom.xml <<'POM'
+          <project xmlns="http://maven.apache.org/POM/4.0.0">
+            <modelVersion>4.0.0</modelVersion>
+            <groupId>local</groupId>
+            <artifactId>deps</artifactId>
+            <version>1</version>
+            <repositories>
+              <repository>
+                <id>papermc</id>
+                <url>https://repo.papermc.io/repository/maven-public/</url>
+              </repository>
+            </repositories>
+            <dependencies>
+              <dependency>
+                <groupId>io.papermc.paper</groupId>
+                <artifactId>paper-api</artifactId>
+                <version>1.21.4-R0.1-SNAPSHOT</version>
+              </dependency>
+            </dependencies>
+          </project>
+          POM
+          mvn -q -f deps-pom.xml dependency:copy-dependencies -DoutputDirectory=deps
+
+      - name: Build
+        run: |
+          python build.py
+          ls -l LunarWrath.jar
+
+      - name: Release notes
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          python - <<'PY'
+          import os, re
+          v = os.environ["GITHUB_REF_NAME"].lstrip("v")
+          s = open("CHANGELOG.md", encoding="utf-8").read()
+          m = re.search(r"^## " + re.escape(v) + r" \(.*?\)\n(.*?)(?=^## |\Z)", s, re.S | re.M)
+          open("notes.md", "w", encoding="utf-8").write(m.group(1).strip() + "\n" if m else "See CHANGELOG.md\n")
+          PY
+
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" LunarWrath.jar --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" LunarWrath.jar --title "LunarWrath $GITHUB_REF_NAME" --notes-file notes.md
+          fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Build script for BloodMoonPlus v1.0.1-RU.
-Compiles all Java source files under src/ and packages them into BloodMoonPlus-1.0.1-RU.jar.
+"""Build script for LunarWrath.
+Compiles all Java source files under src/ and packages them into LunarWrath.jar.
 """
 import glob
 import os
@@ -12,7 +12,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(ROOT, "src")
 BUILD_DIR = os.path.join(ROOT, "build")
 CLASSES_DIR = os.path.join(BUILD_DIR, "classes")
-OUT_JAR = os.path.join(ROOT, "BloodMoonPlus-1.0.1-RU.jar")
+OUT_JAR = os.path.join(ROOT, "LunarWrath.jar")
 
 # Discover javac
 javac = shutil.which("javac")
@@ -25,7 +25,7 @@ if not javac:
 
 # Discover paper-api and PlaceholderAPI dependencies
 gradle_jars = glob.glob(r"C:\Users\*\.gradle\caches\modules-2\files-2.1\**\*.jar", recursive=True)
-libs = glob.glob(os.path.join(ROOT, "libs", "*.jar"))
+libs = glob.glob(os.path.join(ROOT, "libs", "*.jar")) + glob.glob(os.path.join(ROOT, "deps", "*.jar"))
 cp = os.pathsep.join(gradle_jars + libs)
 
 sources = glob.glob(os.path.join(SRC_DIR, "**", "*.java"), recursive=True)

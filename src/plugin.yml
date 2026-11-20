@@ -1,10 +1,11 @@
 name: BloodMoonPlus
-version: '1.0.1'
+version: '1.0.9'
 main: dev.bloodmoonplus.BloodMoonPlus
 api-version: '26.2'
 load: POSTWORLD
-description: Luna de Sangre con horarios fijos (hora de México), loot por rareza, items legendarios/míticos, jefes y dificultad escalable.
-authors: [BloodMoonPlus]
+description: LunarWrath. Scheduled blood, black and purple moons with hordes, bosses, tiered loot and scaling difficulty.
+authors: [milkycloud-dev]
+website: https://github.com/milkycloud-dev/lunar-wrath
 softdepend: [PlaceholderAPI, Multiverse-Core, WorldGuard]
 commands:
   luna:
