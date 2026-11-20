@@ -9,14 +9,14 @@ website: https://github.com/milkycloud-dev/lunar-wrath
 softdepend: [PlaceholderAPI, Multiverse-Core, WorldGuard]
 commands:
   luna:
-    description: Control de la Luna de Sangre
+    description: Управление Кровавой Луной
     aliases: [lunadesangre, bm, bloodmoon]
     permission: bloodmoon.use
     usage: /luna <next|start|stop|difficulty|boss|horde|killmobs|give|items|chances|reload>
 permissions:
   bloodmoon.use:
-    description: Ver estado y próximos eventos
+    description: Просмотр статуса и ближайших событий
     default: true
   bloodmoon.admin:
-    description: Administrar la Luna de Sangre
+    description: Администрирование Кровавой Луны
     default: op

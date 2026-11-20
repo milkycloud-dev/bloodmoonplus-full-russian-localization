@@ -36,7 +36,7 @@ SurvivorRewards:
   DisqualifyOnDisconnect: false
   RewardOncePerSession: true
   Messages:
-    - "&a¡Sobreviviste a la Luna de Sangre!"
+    - "&aВы пережили Кровавую Луну!"
   Commands:
     - "give %player% minecraft:diamond 1;f"
     - "experience add %player% 100 points;f"
