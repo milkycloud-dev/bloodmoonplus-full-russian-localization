@@ -77,7 +77,7 @@ item:
 
 # ==================== Команды ====================
 cmd:
-  usage: "<yellow>Использование: /luna <next|start|stop|difficulty|boss|horde|killmobs|give|items|chances|reload|survivors>"
+  usage: "<yellow>Неизвестная команда. Список: <white>/luna help</white>, аргументы подсказывает Tab."
   reloaded: "<green>Конфигурация перезагружена."
   started: "<green>Кровавая Луна запущена в {world}."
   stopped: "<yellow>Кровавая Луна остановлена в {world}."

@@ -25,6 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.util.Vector;
 
 public final class ContainerWrathManager implements Listener {
    private final BloodMoonPlus plugin;
@@ -35,6 +36,9 @@ public final class ContainerWrathManager implements Listener {
    private int warningsBeforePunish = 1;
    private int cooldownSeconds = 180;
    private String bossId = "wither_sombra";
+   private boolean bossEnabled = true;
+   private boolean explosionEnabled = true;
+   private double explosionDamage = 6.0;
    private boolean exemptCreative = true;
    private String bypassPermission = "bloodmoon.bypass.containerwrath";
    private String warnMessage;
@@ -79,11 +83,14 @@ public final class ContainerWrathManager implements Listener {
       this.warningsBeforePunish = Math.max(0, cfg.getInt("container-wrath.warnings-before-punish", 1));
       this.cooldownSeconds = Math.max(0, cfg.getInt("container-wrath.punish-cooldown-seconds", 180));
       this.bossId = cfg.getString("container-wrath.boss", "wither_sombra");
+      this.bossEnabled = cfg.getBoolean("container-wrath.boss-enabled", true);
+      this.explosionEnabled = cfg.getBoolean("container-wrath.explosion.enabled", true);
+      this.explosionDamage = Math.max(0.0, cfg.getDouble("container-wrath.explosion.damage", 6.0));
       this.exemptCreative = cfg.getBoolean("container-wrath.exempt-creative", true);
       this.bypassPermission = cfg.getString("container-wrath.bypass-permission", "bloodmoon.bypass.containerwrath");
       this.warnMessage = cfg.getString(
          "container-wrath.warn-message",
-         "<dark_red><bold>⚠ Сундуки запечатаны Кровавой Луной!</bold></dark_red> <red>Пока луна в небе, хранилища открывать нельзя. Следующая попытка пробудит то, что спит внутри.</red>"
+         "<dark_red><bold>⚠ Не открывайте сундуки во время Кровавой Луны!</bold></dark_red> <red>Хранилища запечатаны, печать взрывается при касании. Следующая попытка пробудит то, что спит внутри.</red>"
       );
       this.punishMessage = cfg.getString(
          "container-wrath.punish-message",
@@ -158,7 +165,8 @@ public final class ContainerWrathManager implements Listener {
       a.lastMessageMs = now;
       a.count++;
 
-      boolean punish = a.count > this.warningsBeforePunish
+      boolean punish = this.bossEnabled
+         && a.count > this.warningsBeforePunish
          && now - a.lastPunishMs >= (long)this.cooldownSeconds * 1000L
          && this.bossId != null && !this.bossId.isEmpty()
          && this.plugin.bosses() != null;
@@ -182,6 +190,22 @@ public final class ContainerWrathManager implements Listener {
          this.plugin.getLogger().warning("container-wrath: boss " + this.bossId + " failed to spawn for " + p.getName());
       }
 
+      if (this.explosionEnabled) {
+         World w = at.getWorld();
+         w.spawnParticle(Particle.EXPLOSION_EMITTER, at, 1);
+         w.spawnParticle(Particle.LARGE_SMOKE, at, 20, 0.4, 0.4, 0.4, 0.02);
+         w.playSound(at, Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 0.9F);
+         if (this.explosionDamage > 0.0) {
+            p.damage(this.explosionDamage);
+         }
+         Vector push = p.getLocation().toVector().subtract(at.toVector()).setY(0);
+         if (push.lengthSquared() < 0.01) {
+            push = p.getLocation().getDirection().multiply(-1).setY(0);
+         }
+         if (push.lengthSquared() > 0.0001) {
+            p.setVelocity(push.normalize().multiply(0.6).setY(0.4));
+         }
+      }
       if (this.warnMessage != null && !this.warnMessage.isEmpty()) {
          p.sendMessage(Util.mini(this.warnMessage.replace("{player}", p.getName())));
       }

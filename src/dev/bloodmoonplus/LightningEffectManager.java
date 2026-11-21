@@ -20,18 +20,21 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class LightningEffectManager implements Listener {
    public static final UUID ALL_PLAYERS = new UUID(0L, 0L);
+   public static final double MIN_STORM_RATE = 0.05;
+   public static final double MAX_STORM_RATE = 50.0;
+   public static final double MIN_SMITE_INTERVAL = 0.1;
 
    public static class SmiteTask {
       public final UUID playerId;
       public final double damage;
-      public final int intervalSeconds;
+      public volatile double intervalSeconds;
       public final long endMs;
       public long lastStrikeMs;
 
-      public SmiteTask(UUID playerId, double damage, int intervalSeconds, long durationSeconds) {
+      public SmiteTask(UUID playerId, double damage, double intervalSeconds, long durationSeconds) {
          this.playerId = playerId;
          this.damage = damage;
-         this.intervalSeconds = Math.max(1, intervalSeconds);
+         this.intervalSeconds = Math.max(MIN_SMITE_INTERVAL, intervalSeconds);
          this.endMs = durationSeconds > 0 ? System.currentTimeMillis() + durationSeconds * 1000L : 0L;
          this.lastStrikeMs = 0L;
       }
@@ -39,13 +42,13 @@ public final class LightningEffectManager implements Listener {
 
    public static class AmbientStorm {
       public final UUID playerId;
-      public final double strikesPerSec;
+      public volatile double strikesPerSec;
       public final double radius;
       public final long endMs;
 
       public AmbientStorm(UUID playerId, double strikesPerSec, double radius, long durationSeconds) {
          this.playerId = playerId;
-         this.strikesPerSec = Math.max(0.1, strikesPerSec);
+         this.strikesPerSec = Math.max(MIN_STORM_RATE, strikesPerSec);
          this.radius = Math.max(1.0, radius);
          this.endMs = durationSeconds > 0 ? System.currentTimeMillis() + durationSeconds * 1000L : 0L;
       }
@@ -87,7 +90,31 @@ public final class LightningEffectManager implements Listener {
       return this.storms.remove(target) != null;
    }
 
-   public void startSmite(UUID target, double damage, int intervalSeconds, long durationSeconds) {
+   public int setStormRate(UUID target, double strikesPerSec) {
+      double v = Math.max(MIN_STORM_RATE, Math.min(MAX_STORM_RATE, strikesPerSec));
+      int n = 0;
+      for (AmbientStorm st : this.storms.values()) {
+         if (target == null || st.playerId.equals(target)) {
+            st.strikesPerSec = v;
+            n++;
+         }
+      }
+      return n;
+   }
+
+   public int setSmiteInterval(UUID target, double intervalSeconds) {
+      double v = Math.max(MIN_SMITE_INTERVAL, intervalSeconds);
+      int n = 0;
+      for (SmiteTask t : this.smites.values()) {
+         if (target == null || t.playerId.equals(target)) {
+            t.intervalSeconds = v;
+            n++;
+         }
+      }
+      return n;
+   }
+
+   public void startSmite(UUID target, double damage, double intervalSeconds, long durationSeconds) {
       this.smites.put(target, new SmiteTask(target, damage, intervalSeconds, durationSeconds));
    }
 
@@ -180,7 +207,7 @@ public final class LightningEffectManager implements Listener {
             continue;
          }
 
-         if (now - smite.lastStrikeMs >= (long) smite.intervalSeconds * 1000L) {
+         if (now - smite.lastStrikeMs >= (long) (smite.intervalSeconds * 1000.0)) {
             smite.lastStrikeMs = now;
             Player p = Bukkit.getPlayer(smite.playerId);
             if (p != null && p.isOnline() && !p.isDead()) {

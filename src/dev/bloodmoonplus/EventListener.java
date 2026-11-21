@@ -291,6 +291,11 @@ public final class EventListener implements Listener {
             return;
          }
 
+         if (this.plugin.deathSummary() != null && this.plugin.deathSummary().isSuppressed(p)) {
+            e.deathMessage(null);
+            return;
+         }
+
          if (this.plugin.messages().announce("player-deaths", true)) {
             String rawCause = null;
             if (e.deathMessage() != null) {

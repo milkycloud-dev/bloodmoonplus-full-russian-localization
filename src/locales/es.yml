@@ -72,7 +72,7 @@ item:
 
 # ==================== Commands ====================
 cmd:
-  usage: "<yellow>Uso: /luna <next|start|stop|difficulty|boss|horde|killmobs|give|items|chances|reload|survivors>"
+  usage: "<yellow>Comando desconocido. Lista: <white>/luna help</white>, Tab sugiere argumentos."
   reloaded: "<green>Configuración recargada."
   started: "<green>Luna de Sangre iniciada en {world}."
   stopped: "<yellow>Luna de Sangre detenida en {world}."

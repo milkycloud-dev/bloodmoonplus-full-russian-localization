@@ -1,5 +1,5 @@
 name: BloodMoonPlus
-version: '1.0.10'
+version: '1.0.11'
 main: dev.bloodmoonplus.BloodMoonPlus
 api-version: '26.2'
 load: POSTWORLD
@@ -12,7 +12,7 @@ commands:
     description: Управление Кровавой Луной
     aliases: [lunadesangre, bm, bloodmoon]
     permission: bloodmoon.use
-    usage: /luna <next|start|stop|difficulty|boss|horde|killmobs|give|items|chances|reload>
+    usage: /luna help
 permissions:
   bloodmoon.use:
     description: Просмотр статуса и ближайших событий

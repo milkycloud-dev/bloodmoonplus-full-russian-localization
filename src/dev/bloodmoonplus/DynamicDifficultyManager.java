@@ -32,7 +32,7 @@ public final class DynamicDifficultyManager implements Listener {
    private double campingRadius = 4.0;
    private int escalationIntervalSeconds = 25;
    private double difficultyStep = 0.25;
-   private double maxDifficulty = 5.0;
+   private double maxDifficulty = 0.0;
    private boolean spawnPunishmentHorde = true;
    private int punishmentHordeCount = 5;
    private boolean decayOnCombat = true;
@@ -71,7 +71,8 @@ public final class DynamicDifficultyManager implements Listener {
       this.campingRadius = Math.max(1.0, cfg.getDouble("dynamic-difficulty.camping-radius", 4.0));
       this.escalationIntervalSeconds = Math.max(5, cfg.getInt("dynamic-difficulty.escalation-interval-seconds", 25));
       this.difficultyStep = Math.max(0.01, cfg.getDouble("dynamic-difficulty.difficulty-step", 0.25));
-      this.maxDifficulty = Math.max(1.0, cfg.getDouble("dynamic-difficulty.max-difficulty", 5.0));
+      double cap = cfg.getDouble("dynamic-difficulty.max-difficulty", 0.0);
+      this.maxDifficulty = cap <= 0.0 ? 0.0 : Math.max(1.0, cap);
       this.spawnPunishmentHorde = cfg.getBoolean("dynamic-difficulty.spawn-punishment-horde", true);
       this.punishmentHordeCount = Math.max(1, cfg.getInt("dynamic-difficulty.punishment-horde-count", 5));
       this.decayOnCombat = cfg.getBoolean("dynamic-difficulty.decay-on-combat", true);
@@ -79,11 +80,11 @@ public final class DynamicDifficultyManager implements Listener {
       this.decayStep = Math.max(0.01, cfg.getDouble("dynamic-difficulty.decay-step", 0.1));
       this.exemptCreative = cfg.getBoolean("dynamic-difficulty.exempt-creative", true);
       this.bypassPermission = cfg.getString("dynamic-difficulty.bypass-permission", "bloodmoon.bypass.dynamicdifficulty");
-      this.broadcastChat = cfg.getBoolean("dynamic-difficulty.broadcast-chat", false);
+      this.broadcastChat = cfg.getBoolean("dynamic-difficulty.broadcast-chat", true);
 
       this.broadcastEscalate = cfg.getString(
          "dynamic-difficulty.announcement.escalate",
-         "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Трусость и пассивность выживших распаляют древнее зло! Сложность Луны возросла до <yellow>x{difficulty}</yellow>!</red>"
+         "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Игрок <yellow>{player}</yellow> отсиживается вместо боя, и Луна распаляется! Сложность возросла до <yellow>x{difficulty}</yellow>!</red>"
       );
       this.camperWarning = cfg.getString(
          "dynamic-difficulty.announcement.camper-warning",
@@ -205,8 +206,10 @@ public final class DynamicDifficultyManager implements Listener {
                   this.lastEscalateSec.put(id, nowSec);
 
                   double curDiff = s.difficulty;
-                  if (curDiff < this.maxDifficulty) {
-                     double nextDiff = Math.min(this.maxDifficulty, Math.round((curDiff + this.difficultyStep) * 100.0) / 100.0);
+                  boolean capped = this.maxDifficulty > 0.0;
+                  if (!capped || curDiff < this.maxDifficulty) {
+                     double raised = Math.round((curDiff + this.difficultyStep) * 100.0) / 100.0;
+                     double nextDiff = capped ? Math.min(this.maxDifficulty, raised) : raised;
                      s.difficulty = nextDiff;
                      this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
 
@@ -215,8 +218,9 @@ public final class DynamicDifficultyManager implements Listener {
                            .replace("{player}", p.getName())
                            .replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));
                         Bukkit.broadcast(Util.mini(msg));
+                     } else {
+                        p.sendMessage(Util.mini("<red>⚡ Пассивность распаляет зло! Сложность Луны возросла до <yellow>x" + String.format(Locale.ROOT, "%.2f", nextDiff) + "</yellow>!</red>"));
                      }
-                     p.sendMessage(Util.mini("<red>⚡ Пассивность распаляет зло! Сложность Луны возросла до <yellow>x" + String.format(Locale.ROOT, "%.2f", nextDiff) + "</yellow>!</red>"));
 
                      w.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 0.5F, 1.2F);
                      w.spawnParticle(Particle.SOUL_FIRE_FLAME, p.getLocation().clone().add(0, 1, 0), 30, 0.8, 0.8, 0.8, 0.05);

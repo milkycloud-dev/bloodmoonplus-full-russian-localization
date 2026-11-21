@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.11 (2026-11-21)
+
+- Dynamic difficulty is uncapped by default: `dynamic-difficulty.max-difficulty: 0` means no limit, any positive value sets a cap. Mob stats stay bounded by `difficulty.max-health-cap`, `speed-cap` and `max-horde-size-multiplier`.
+- Difficulty escalation is announced in chat with the camper's name (`broadcast-chat: true`, `{player}` in `announcement.escalate`). Dimension and elytra wrath also name the player in chat, every `broadcast-interval-seconds`.
+- New `death-summary`: the first death of a player during the moon is announced as before; further deaths within `window-seconds` (60) are hidden from chat and posted as one summary line per window.
+- Container wrath: attempts that do not summon the boss now set off a sealed-chest blast that breaks no blocks, hits only the opener for `explosion.damage` (6 = 3 hearts) and knocks them back, with a chat warning not to open chests. `explosion.enabled` and `boss-enabled` switch both parts off separately.
+- Lightning: `/luna lightning frequency <storm|smite> <player|all> <value>` changes running effects live (storm strikes per second 0.05-50, smite interval from 0.1 s); smite intervals accept fractions.
+- New `/luna sound <sound|random> [all|world|player] [volume]` with 13 presets (wither, dragon, warden, roar, heartbeat, sonic, curse, ghast, scream, cave, horn, bell, thunder).
+- Commands unified: English subcommand names everywhere, Tab offers only them plus arguments for every subcommand; old Russian and Spanish aliases still work. New `/luna help`; unknown subcommands point to it. Removed the non-existent `survivors` from usage.
+
 ## 1.0.10 (2026-11-21)
 
 - Elytra wrath damage escalates: each consecutive lightning strike deals `damage-multiplier` (default 1.5) times the previous one, capped at `max-damage` (40). The streak survives landing, healing and relogging and resets only after `streak-reset-seconds` (60) without a strike, on death or when the moon ends.

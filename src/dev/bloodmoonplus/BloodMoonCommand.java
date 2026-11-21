@@ -11,19 +11,24 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.inventory.ItemStack;
 
 public final class BloodMoonCommand implements TabExecutor {
    private static final Map<String, String> ALIASES = new LinkedHashMap<>();
-   private static final List<String> USE_SUBS = List.of("next");
-   private static final List<String> ADMIN_SUBS = List.of("start", "stop", "difficulty", "boss", "horde", "killmobs", "give", "items", "chances", "reload", "warn", "evolution", "countdown", "cancel", "lightning", "time", "duration", "dynamic", "black", "purple", "blood");
+   private static final List<String> USE_SUBS = List.of("next", "help");
+   private static final List<String> ADMIN_SUBS = List.of("start", "stop", "blood", "black", "purple", "warn", "countdown", "cancel", "time", "difficulty", "dynamic", "boss", "horde", "killmobs", "lightning", "sound", "evolution", "give", "items", "chances", "reload");
+   private static final Map<String, ScarySound> SCARY_SOUNDS = new LinkedHashMap<>();
+
+   private record ScarySound(Sound sound, float pitch, String label) {
+   }
    private final BloodMoonPlus plugin;
 
    BloodMoonCommand(BloodMoonPlus plugin) {
@@ -51,6 +56,12 @@ public final class BloodMoonCommand implements TabExecutor {
             switch (sub) {
                case "next":
                   this.next(s);
+                  break;
+               case "help":
+                  this.help(s);
+                  break;
+               case "sound":
+                  this.sound(s, a);
                   break;
                case "start":
                   this.start(s, a);
@@ -159,7 +170,6 @@ public final class BloodMoonCommand implements TabExecutor {
          List<String> subs = new ArrayList<>(USE_SUBS);
          if (admin) {
             subs.addAll(ADMIN_SUBS);
-            subs.addAll(List.of("отсчет", "время", "динамика", "молнии", "черная", "фиолетовая", "кровавая", "предупредить", "старт", "стоп"));
          }
 
          return filter(subs, args[0]);
@@ -241,9 +251,23 @@ public final class BloodMoonCommand implements TabExecutor {
             case "lightning": {
                List<String> players = new ArrayList<>(Bukkit.getOnlinePlayers().stream().<String>map(Player::getName).toList());
                if (args.length == 2) {
-                  return filter(List.of("storm", "smite", "strike", "stop", "status", "help"), cur);
+                  return filter(List.of("storm", "smite", "strike", "frequency", "stop", "status", "help"), cur);
                }
                String action = args[1].toLowerCase(Locale.ROOT);
+               if (action.equals("frequency") || action.equals("freq") || action.equals("частота")) {
+                  if (args.length == 3) {
+                     return filter(List.of("storm", "smite"), cur);
+                  } else if (args.length == 4) {
+                     List<String> opts = new ArrayList<>(players);
+                     opts.add("all");
+                     return filter(opts, cur);
+                  } else if (args.length == 5) {
+                     return args[2].equalsIgnoreCase("smite")
+                        ? filter(List.of("0.25", "0.5", "1", "2", "5"), cur)
+                        : filter(List.of("0.5", "1", "3", "5", "10", "20"), cur);
+                  }
+                  return List.of();
+               }
                if (action.equals("storm") || action.equals("шторм")) {
                   if (args.length == 3) {
                      List<String> opts = new ArrayList<>(players);
@@ -263,7 +287,7 @@ public final class BloodMoonCommand implements TabExecutor {
                      opts.add("stop");
                      return filter(opts, cur);
                   } else if (args.length == 4) {
-                     return filter(List.of("1", "2", "3", "5", "10"), cur);
+                     return filter(List.of("0.5", "1", "2", "3", "5", "10"), cur);
                   } else if (args.length == 5) {
                      return filter(List.of("1.0", "2.0", "4.0", "10.0"), cur);
                   } else if (args.length == 6) {
@@ -281,6 +305,22 @@ public final class BloodMoonCommand implements TabExecutor {
                      opts.add("all");
                      return filter(opts, cur);
                   }
+               }
+               return List.of();
+            }
+            case "sound": {
+               if (args.length == 2) {
+                  List<String> o = new ArrayList<>(SCARY_SOUNDS.keySet());
+                  o.add("random");
+                  return filter(o, cur);
+               } else if (args.length == 3) {
+                  List<String> o = new ArrayList<>();
+                  o.add("all");
+                  o.addAll(worlds);
+                  o.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
+                  return filter(o, cur);
+               } else if (args.length == 4) {
+                  return filter(List.of("0.5", "1.0", "1.5", "2.0"), cur);
                }
                return List.of();
             }
@@ -920,6 +960,7 @@ public final class BloodMoonCommand implements TabExecutor {
          s.sendMessage(Util.mini("<yellow>/luna lightning storm [игрок|all] [уд/сек] [радиус] [сек]</yellow> <gray>- Периметр молний вокруг игрока</gray>"));
          s.sendMessage(Util.mini("<yellow>/luna lightning smite <игрок> [интервал_сек] [урон_хп] [сек]</yellow> <gray>- Прицельные удары с уроном</gray>"));
          s.sendMessage(Util.mini("<yellow>/luna lightning strike <игрок> [урон_хп]</yellow> <gray>- Одиночный удар молнии</gray>"));
+         s.sendMessage(Util.mini("<yellow>/luna lightning frequency <storm|smite> <игрок|all> <значение></yellow> <gray>- Частота идущих молний: storm в ударах/сек, smite интервал в сек</gray>"));
          s.sendMessage(Util.mini("<yellow>/luna lightning stop [игрок|all]</yellow> <gray>- Остановить эффекты молний</gray>"));
          s.sendMessage(Util.mini("<yellow>/luna lightning status</yellow> <gray>- Показать активные эффекты</gray>"));
          s.sendMessage(Util.mini("<gray>Подсказка: 1.0 HP = 0.5 ❤ (полсердечка), 2.0 HP = 1 ❤, 20.0 HP = полное здоровье.</gray>"));
@@ -966,7 +1007,7 @@ public final class BloodMoonCommand implements TabExecutor {
 
             double rate = 3.0;
             if (a.length > argIdx) {
-               try { rate = Math.max(0.1, Double.parseDouble(a[argIdx])); } catch (NumberFormatException ignored) {}
+               try { rate = Math.max(LightningEffectManager.MIN_STORM_RATE, Math.min(LightningEffectManager.MAX_STORM_RATE, Double.parseDouble(a[argIdx]))); } catch (NumberFormatException ignored) {}
                argIdx++;
             }
 
@@ -1009,9 +1050,9 @@ public final class BloodMoonCommand implements TabExecutor {
                return;
             }
 
-            int interval = 2;
+            double interval = 2.0;
             if (a.length > 2) {
-               try { interval = Math.max(1, Integer.parseInt(a[2])); } catch (NumberFormatException ignored) {}
+               try { interval = Math.max(LightningEffectManager.MIN_SMITE_INTERVAL, Double.parseDouble(a[2])); } catch (NumberFormatException ignored) {}
             }
 
             double damage = 1.0;
@@ -1068,6 +1109,43 @@ public final class BloodMoonCommand implements TabExecutor {
             }
             break;
          }
+         case "frequency":
+         case "freq":
+         case "частота": {
+            if (a.length < 4 || (!a[1].equalsIgnoreCase("storm") && !a[1].equalsIgnoreCase("smite"))) {
+               s.sendMessage(Util.mini("<yellow>Использование: /luna lightning frequency <storm|smite> <игрок|all> <значение></yellow>"));
+               s.sendMessage(Util.mini("<gray>storm: ударов в секунду вокруг игрока (0.05-50). smite: секунд между прицельными ударами (от 0.1).</gray>"));
+               return;
+            }
+            UUID target = null;
+            String targetName = "всех";
+            if (!a[2].equalsIgnoreCase("all")) {
+               Player p = Bukkit.getPlayerExact(a[2]);
+               if (p == null) {
+                  s.sendMessage(Util.mini("<red>Игрок '" + a[2] + "' не найден.</red>"));
+                  return;
+               }
+               target = p.getUniqueId();
+               targetName = p.getName();
+            }
+            double value;
+            try {
+               value = Double.parseDouble(a[3].replace(',', '.'));
+            } catch (NumberFormatException ex) {
+               s.sendMessage(Util.mini("<red>Значение должно быть числом: " + a[3] + "</red>"));
+               return;
+            }
+            boolean storm = a[1].equalsIgnoreCase("storm");
+            int changed = storm ? lm.setStormRate(target, value) : lm.setSmiteInterval(target, value);
+            if (changed == 0) {
+               s.sendMessage(Util.mini("<gray>Для <yellow>" + targetName + "</yellow> нет активных эффектов " + (storm ? "storm" : "smite") + ".</gray>"));
+            } else if (storm) {
+               s.sendMessage(Util.mini("<green>✔ Частота шторма для <yellow>" + targetName + "</yellow>: <white>" + Math.max(LightningEffectManager.MIN_STORM_RATE, Math.min(LightningEffectManager.MAX_STORM_RATE, value)) + " уд/сек</white> (эффектов: " + changed + ").</green>"));
+            } else {
+               s.sendMessage(Util.mini("<green>✔ Интервал прицельных молний для <yellow>" + targetName + "</yellow>: <white>" + Math.max(LightningEffectManager.MIN_SMITE_INTERVAL, value) + " сек</white> (эффектов: " + changed + ").</green>"));
+            }
+            break;
+         }
          case "status":
          case "статус": {
             int stormCount = lm.getStorms().size();
@@ -1080,6 +1158,88 @@ public final class BloodMoonCommand implements TabExecutor {
          default:
             s.sendMessage(Util.mini("<red>Неизвестное действие. Введите /luna lightning help для подсказок.</red>"));
       }
+   }
+
+   private void help(CommandSender s) {
+      s.sendMessage(Util.mini("<dark_red><bold>🌙 Команды Кровавой Луны</bold></dark_red> <gray>(Tab подсказывает аргументы)</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna</yellow> <gray>- статус текущей луны</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna next</yellow> <gray>- ближайшие луны по расписанию</gray>"));
+      if (!s.hasPermission("bloodmoon.admin")) {
+         return;
+      }
+      s.sendMessage(Util.mini("<gold>Запуск и остановка</gold>"));
+      s.sendMessage(Util.mini("<yellow>/luna start [мир] [xN] [время] [blood|black|purple]</yellow> <gray>- запустить луну</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna blood|black|purple [мир] [время] [xN]</yellow> <gray>- запустить луну нужного вида</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna stop [мир|all]</yellow> <gray>- остановить луну</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna warn <время> [normal|dangerous|lethal] [вид] [start]</yellow> <gray>- оповестить о луне</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna countdown <время> [тип] [вид] [мир]</yellow> <gray>- отсчёт до старта</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna cancel</yellow> <gray>- отменить отсчёт</gray>"));
+      s.sendMessage(Util.mini("<gold>Ход луны</gold>"));
+      s.sendMessage(Util.mini("<yellow>/luna time <status|add|take|set> [время] [мир|all]</yellow> <gray>- оставшееся время</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna difficulty <xN> [мир]</yellow> <gray>- задать сложность</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna dynamic <status|on|off|reset> [мир|all]</yellow> <gray>- рост сложности за отсиживание</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna boss <id> [мир|игрок]</yellow> <gray>- призвать босса</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna horde [мир]</yellow> <gray>- волна орды</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna killmobs [мир]</yellow> <gray>- убрать мобов луны</gray>"));
+      s.sendMessage(Util.mini("<gold>Эффекты</gold>"));
+      s.sendMessage(Util.mini("<yellow>/luna lightning <storm|smite|strike|frequency|stop|status></yellow> <gray>- молнии, подробнее /luna lightning help</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna sound <звук|random> [all|мир|игрок] [громкость]</yellow> <gray>- жуткий звук</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna evolution</yellow> <gray>- оповещение об эволюции луны</gray>"));
+      s.sendMessage(Util.mini("<gold>Предметы и настройки</gold>"));
+      s.sendMessage(Util.mini("<yellow>/luna give <игрок> <предмет> [кол-во]</yellow> <gray>- выдать предмет</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna items</yellow> <gray>- список предметов</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna chances <таблица></yellow> <gray>- шансы лута</gray>"));
+      s.sendMessage(Util.mini("<yellow>/luna reload</yellow> <gray>- перечитать конфиги</gray>"));
+   }
+
+   private void sound(CommandSender s, String[] a) {
+      if (a.length == 0) {
+         s.sendMessage(Util.mini("<yellow>Использование: /luna sound <звук|random> [all|мир|игрок] [громкость]</yellow>"));
+         StringBuilder sb = new StringBuilder("<gray>Звуки:");
+         for (Map.Entry<String, ScarySound> en : SCARY_SOUNDS.entrySet()) {
+            sb.append(" <white>").append(en.getKey()).append("</white> (").append(en.getValue().label()).append(")");
+         }
+         s.sendMessage(Util.mini(sb.append("</gray>").toString()));
+         return;
+      }
+      String key = a[0].toLowerCase(Locale.ROOT);
+      ScarySound snd;
+      if (key.equals("random")) {
+         List<ScarySound> all = new ArrayList<>(SCARY_SOUNDS.values());
+         snd = all.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(all.size()));
+      } else {
+         snd = SCARY_SOUNDS.get(key);
+      }
+      if (snd == null) {
+         s.sendMessage(Util.mini("<red>Неизвестный звук '" + a[0] + "'. Нажмите Tab для списка.</red>"));
+         return;
+      }
+      List<Player> targets = new ArrayList<>();
+      String targetName = "всех";
+      if (a.length < 2 || a[1].equalsIgnoreCase("all")) {
+         targets.addAll(Bukkit.getOnlinePlayers());
+      } else {
+         World w = Bukkit.getWorld(a[1]);
+         Player p = Bukkit.getPlayerExact(a[1]);
+         if (w != null) {
+            targets.addAll(w.getPlayers());
+            targetName = "мир " + w.getName();
+         } else if (p != null) {
+            targets.add(p);
+            targetName = p.getName();
+         } else {
+            s.sendMessage(Util.mini("<red>Мир или игрок '" + a[1] + "' не найден.</red>"));
+            return;
+         }
+      }
+      float volume = 1.0F;
+      if (a.length > 2) {
+         try { volume = (float)Math.max(0.1, Math.min(4.0, Double.parseDouble(a[2].replace(',', '.')))); } catch (NumberFormatException ignored) {}
+      }
+      for (Player p : targets) {
+         p.playSound(p.getLocation(), snd.sound(), SoundCategory.MASTER, volume, snd.pitch());
+      }
+      s.sendMessage(Util.mini("<green>✔ Звук <white>" + snd.label() + "</white> проигран для <yellow>" + targetName + "</yellow> (игроков: " + targets.size() + ").</green>"));
    }
 
    private void time(CommandSender s, String[] a) {
@@ -1291,5 +1451,23 @@ public final class BloodMoonCommand implements TabExecutor {
       ALIASES.put("чёрная", "black");
       ALIASES.put("фиолетовая", "purple");
       ALIASES.put("кровавая", "blood");
+      ALIASES.put("help", "help");
+      ALIASES.put("помощь", "help");
+      ALIASES.put("?", "help");
+      ALIASES.put("sound", "sound");
+      ALIASES.put("звук", "sound");
+      SCARY_SOUNDS.put("wither", new ScarySound(Sound.ENTITY_WITHER_SPAWN, 0.6F, "рождение иссушителя"));
+      SCARY_SOUNDS.put("dragon", new ScarySound(Sound.ENTITY_ENDER_DRAGON_GROWL, 0.5F, "рык дракона"));
+      SCARY_SOUNDS.put("warden", new ScarySound(Sound.ENTITY_WARDEN_EMERGE, 0.8F, "появление хранителя"));
+      SCARY_SOUNDS.put("roar", new ScarySound(Sound.ENTITY_WARDEN_ROAR, 0.7F, "рёв хранителя"));
+      SCARY_SOUNDS.put("heartbeat", new ScarySound(Sound.ENTITY_WARDEN_HEARTBEAT, 0.6F, "сердцебиение"));
+      SCARY_SOUNDS.put("sonic", new ScarySound(Sound.ENTITY_WARDEN_SONIC_BOOM, 0.6F, "звуковой удар"));
+      SCARY_SOUNDS.put("curse", new ScarySound(Sound.ENTITY_ELDER_GUARDIAN_CURSE, 0.7F, "проклятие древнего стража"));
+      SCARY_SOUNDS.put("ghast", new ScarySound(Sound.ENTITY_GHAST_SCREAM, 0.5F, "крик гаста"));
+      SCARY_SOUNDS.put("scream", new ScarySound(Sound.ENTITY_ENDERMAN_SCREAM, 0.5F, "вопль эндермена"));
+      SCARY_SOUNDS.put("cave", new ScarySound(Sound.AMBIENT_CAVE, 0.8F, "шёпот пещеры"));
+      SCARY_SOUNDS.put("horn", new ScarySound(Sound.EVENT_RAID_HORN, 0.7F, "рог рейда"));
+      SCARY_SOUNDS.put("bell", new ScarySound(Sound.BLOCK_BELL_RESONATE, 0.5F, "гул колокола"));
+      SCARY_SOUNDS.put("thunder", new ScarySound(Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.5F, "далёкий гром"));
    }
 }
