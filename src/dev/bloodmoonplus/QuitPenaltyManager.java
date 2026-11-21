@@ -65,10 +65,10 @@ public final class QuitPenaltyManager implements Listener {
          "<gradient:#ff0000:#880000><bold>☠ Эволюция кровавой луны:</bold></gradient> <red><bold>при выходе с сервера после начала кровавой луны вы умрёте!</bold></red>"
       );
       this.titleDelaySeconds = cfg.getInt("quit-penalty.announcement.title-delay-seconds", 3);
-      this.screenTitle = cfg.getString("quit-penalty.announcement.title", "<dark_red><bold>☠ ЭВОЛЮЦИЯ КРОВАВОЙ ЛУНЫ ☠</bold></dark_red>");
+      this.screenTitle = cfg.getString("quit-penalty.announcement.title", "<dark_red><bold>НЕ ВЫХОДИТЕ!</bold></dark_red>");
       this.screenSubtitle = cfg.getString(
          "quit-penalty.announcement.subtitle",
-         "<red><bold>При выходе с сервера после начала кровавой луны вы умрёте!</bold></red>"
+         "<red>Выход из игры сейчас = смерть</red>"
       );
       this.fadeInTicks = cfg.getInt("quit-penalty.announcement.title-times.fade-in", 10);
       this.stayTicks = cfg.getInt("quit-penalty.announcement.title-times.stay", 120);
@@ -79,8 +79,8 @@ public final class QuitPenaltyManager implements Listener {
          "quit-penalty.announcement.join-warning",
          "<gradient:#ff0000:#770000><bold>☠ ВНИМАНИЕ:</bold></gradient> <red>Идёт Кровавая Луна! Выход с сервера в течение {remaining}с приведёт к немедленной смерти!</red>"
       );
-      this.joinTitle = cfg.getString("quit-penalty.announcement.join-title", "<dark_red><bold>☠ КРОВАВАЯ ЛУНА АКТИВНА ☠</bold></dark_red>");
-      this.joinSubtitle = cfg.getString("quit-penalty.announcement.join-subtitle", "<red><bold>Не выходите! До окончания блокировки: {remaining}с</bold></red>");
+      this.joinTitle = cfg.getString("quit-penalty.announcement.join-title", "<dark_red><bold>ЛУНА АКТИВНА</bold></dark_red>");
+      this.joinSubtitle = cfg.getString("quit-penalty.announcement.join-subtitle", "<red>Не выходите ещё {remaining} с</red>");
 
       this.killOnQuit = cfg.getBoolean("quit-penalty.on-quit.kill", true);
       this.dropItems = cfg.getBoolean("quit-penalty.on-quit.drop-items", true);

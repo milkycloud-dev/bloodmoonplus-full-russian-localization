@@ -296,7 +296,7 @@ public final class LootManager {
          w.playSound(loc, Sound.BLOCK_BELL_RESONATE, 1.2F, 0.6F);
 
          player.showTitle(Title.title(
-            Util.mini("<gradient:#ff0055:#aa00ff><bold>⚡ МИФИЧЕСКИЙ ДРОП ⚡</bold></gradient>"),
+            Util.mini("<gradient:#ff0055:#aa00ff><bold>МИФИЧЕСКИЙ ДРОП</bold></gradient>"),
             Util.mini(itemName),
             Times.times(Duration.ofMillis(300L), Duration.ofMillis(2500L), Duration.ofMillis(500L))
          ));

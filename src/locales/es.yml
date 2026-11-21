@@ -13,7 +13,7 @@ dying-results-xp-loss: "<dark_red><bold>Morir durante una Luna de Sangre reinici
 
 # ==================== Event ====================
 event:
-  title: "<dark_red><bold>🌙 LUNA DE SANGRE"
+  title: "<dark_red><bold>LUNA DE SANGRE"
   subtitle: "<red>Sobrevive hasta el amanecer <gray>(x{difficulty})"
   start: "<red>¡La Luna de Sangre ha comenzado! <gray>Dificultad <red>x{difficulty}<gray> · Duración <white>{minutes} min"
   end: "<green>La Luna de Sangre ha terminado. ¡Llega el amanecer!"

@@ -330,8 +330,8 @@ public final class EventManager {
                   "moon-types.black.announcement.chat",
                   "<gradient:#222222:#880088><bold>🌑 ЗАТМЕНИЕ ЧЁРНОЙ ЛУНЫ:</bold></gradient> <dark_gray><bold>Тьма поглотила небеса...</bold></dark_gray> <red>Взошла ЧЁРНАЯ ЛУНА! Порождения мрака стали на 50% сильнее и многочисленнее!</red>"
                );
-               String titleStr = this.plugin.getConfig().getString("moon-types.black.announcement.title", "<gradient:#111111:#660066><bold>🌑 ЧЁРНАЯ ЛУНА 🌑</bold></gradient>");
-               String subStr = this.plugin.getConfig().getString("moon-types.black.announcement.subtitle", "<gray>Тьма накрыла мир. Сражайтесь или сгиньте во мраке!</gray>");
+               String titleStr = this.plugin.getConfig().getString("moon-types.black.announcement.title", "<gradient:#111111:#660066><bold>ЧЁРНАЯ ЛУНА</bold></gradient>");
+               String subStr = this.plugin.getConfig().getString("moon-types.black.announcement.subtitle", "<gray>Тьма накрыла мир. Сражайтесь!</gray>");
 
                Title t = Title.title(Util.mini(titleStr), Util.mini(subStr), Times.times(Duration.ofMillis(500L), Duration.ofSeconds(4L), Duration.ofSeconds(1L)));
                for (Player p : w.getPlayers()) {
@@ -348,8 +348,8 @@ public final class EventManager {
                   "moon-types.purple.announcement.chat",
                   "<gradient:#9900ff:#e000ff><bold>🔮 РАЗРЫВ ПУСТОТЫ:</bold></gradient> <light_purple>Небесный свод раскололся фиолетовым сиянием... Взошла ФИОЛЕТОВАЯ ЛУНА! Астральные твари проникли в этот мир!</light_purple>"
                );
-               String titleStr = this.plugin.getConfig().getString("moon-types.purple.announcement.title", "<gradient:#8800ff:#ff00ff><bold>🔮 ФИОЛЕТОВАЯ ЛУНА 🔮</bold></gradient>");
-               String subStr = this.plugin.getConfig().getString("moon-types.purple.announcement.subtitle", "<light_purple>Астральный разрыв открыт! Остерегайтесь магии пустоты!</light_purple>");
+               String titleStr = this.plugin.getConfig().getString("moon-types.purple.announcement.title", "<gradient:#8800ff:#ff00ff><bold>ФИОЛЕТОВАЯ ЛУНА</bold></gradient>");
+               String subStr = this.plugin.getConfig().getString("moon-types.purple.announcement.subtitle", "<light_purple>Разрыв пустоты открыт!</light_purple>");
 
                Title t = Title.title(Util.mini(titleStr), Util.mini(subStr), Times.times(Duration.ofMillis(500L), Duration.ofSeconds(4L), Duration.ofSeconds(1L)));
                for (Player p : w.getPlayers()) {

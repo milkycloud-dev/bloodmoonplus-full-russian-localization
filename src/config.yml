@@ -141,7 +141,7 @@ event:
   survivor-commands: []         # consola, por superviviente; {player}  ej: "eco give {player} 500"
   start-announcement:
     # Заголовок титула при старте
-    title: "<dark_red><bold>🌙 КРОВАВАЯ ЛУНА</bold></dark_red>"
+    title: "<dark_red><bold>КРОВАВАЯ ЛУНА</bold></dark_red>"
     # Подзаголовок без параметров (когда warning.show-parameters: false)
     subtitle: "<red>Выживите до рассвета...</red>"
     # Подзаголовок с параметрами (когда warning.show-parameters: true)
@@ -211,9 +211,9 @@ countdown:
   # Сообщение в чат (с параметрами, если show-parameters: true)
   chat-with-params: "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! <gray>(Сложность <red>x{difficulty}</red> · Длительность <white>{duration} мин</white>)</gray></red>"
   # Заголовок на экране
-  title: "<dark_red><bold>КРОВАВАЯ ЛУНА ПРИБЛИЖАЕТСЯ</bold></dark_red>"
+  title: "<dark_red><bold>КРОВАВАЯ ЛУНА</bold></dark_red>"
   subtitle: "<red>Начало через {time}...</red>"
-  subtitle-with-params: "<red>Начало через {time}... <gray>(Сложность x{difficulty})</gray></red>"
+  subtitle-with-params: "<red>Начало через {time} <gray>(x{difficulty})</gray></red>"
 
 # ------------------------------------------------------------
 #  БЛОКИРОВКА РЕЖИМА НАБЛЮДАТЕЛЯ (GM 3 / SPECTATOR BLOCK)
@@ -421,8 +421,8 @@ warning-types:
   dangerous:
     default-difficulty: 2.5
     chat: "<gradient:#ff0055:#990022><bold>☠ ЗЛОВЕЩЕЕ ПРЕДЗНАМЕНОВАНИЕ:</bold></gradient> <red>Воздух наполняется запахом пепла и серы... Приближается <bold><dark_red>ОПАСНАЯ Кровавая Луна</dark_red></bold> через <yellow>{time}</yellow>! Полчища древних тварей жаждут крови!</red>"
-    title: "<gradient:#ff0033:#770011><bold>☠ ОПАСНАЯ КРОВАВАЯ ЛУНА ☠</bold></gradient>"
-    subtitle: "<red>Приближается через <yellow>{time}</yellow>! Спасайтесь!</red>"
+    title: "<gradient:#ff0033:#770011><bold>ОПАСНАЯ ЛУНА</bold></gradient>"
+    subtitle: "<red>Через <yellow>{time}</yellow>! Спасайтесь!</red>"
     sound: "entity.ender_dragon.growl"
     volume: 1.0
     pitch: 0.9
@@ -430,8 +430,8 @@ warning-types:
   lethal:
     default-difficulty: 5.0
     chat: "<gradient:#880000:#ff0000><bold>⚡ СМЕРТОНОСНЫЙ РОК:</bold></gradient> <red><bold>Земля содрогается, а небеса плачут кровью...</bold> Через <yellow>{time}</yellow> взойдет <gradient:#ff0000:#330000><bold>СМЕРТЕЛЬНАЯ Кровавая Луна</bold></gradient>! Шансов выжить почти нет. Никакой пощады не будет!</red>"
-    title: "<gradient:#330000:#ff0000><bold>☠ СМЕРТЕЛЬНАЯ ЛУНА ☠</bold></gradient>"
-    subtitle: "<dark_red><bold>Через {time}! Никто не покинет эту ночь живым!</bold></dark_red>"
+    title: "<gradient:#330000:#ff0000><bold>ЛУНА СМЕРТИ</bold></gradient>"
+    subtitle: "<dark_red>Через {time}. Живым не уйдёт никто</dark_red>"
     sound: "entity.wither.spawn"
     volume: 1.0
     pitch: 0.6
@@ -449,8 +449,8 @@ moon-types:
     horde-size-multiplier: 1.5
     announcement:
       chat: "<gradient:#222222:#880088><bold>🌑 ЗАТМЕНИЕ ЧЁРНОЙ ЛУНЫ:</bold></gradient> <dark_gray><bold>Тьма поглотила небеса...</bold></dark_gray> <red>Взошла ЧЁРНАЯ ЛУНА! Порождения мрака стали на 50% сильнее и многочисленнее!</red>"
-      title: "<gradient:#111111:#660066><bold>🌑 ЧЁРНАЯ ЛУНА 🌑</bold></gradient>"
-      subtitle: "<gray>Тьма накрыла мир. Сражайтесь или сгиньте во мраке!</gray>"
+      title: "<gradient:#111111:#660066><bold>ЧЁРНАЯ ЛУНА</bold></gradient>"
+      subtitle: "<gray>Тьма накрыла мир. Сражайтесь!</gray>"
       sound: "entity.wither.spawn"
       volume: 1.0
       pitch: 0.5
@@ -463,8 +463,8 @@ moon-types:
     horde-size-multiplier: 1.25
     announcement:
       chat: "<gradient:#9900ff:#e000ff><bold>🔮 РАЗРЫВ ПУСТОТЫ:</bold></gradient> <light_purple>Небесный свод раскололся фиолетовым сиянием... Взошла ФИОЛЕТОВАЯ ЛУНА! Астральные твари проникли в этот мир!</light_purple>"
-      title: "<gradient:#8800ff:#ff00ff><bold>🔮 ФИОЛЕТОВАЯ ЛУНА 🔮</bold></gradient>"
-      subtitle: "<light_purple>Астральный разрыв открыт! Остерегайтесь магии пустоты!</light_purple>"
+      title: "<gradient:#8800ff:#ff00ff><bold>ФИОЛЕТОВАЯ ЛУНА</bold></gradient>"
+      subtitle: "<light_purple>Разрыв пустоты открыт!</light_purple>"
       sound: "entity.ender_dragon.growl"
       volume: 1.0
       pitch: 1.1
@@ -509,9 +509,9 @@ quit-penalty:
     # Задержка перед показом титула на экране (в секундах, чтобы не перебивать заставку Луны)
     title-delay-seconds: 3
     # Заголовок на весь экран
-    title: "<dark_red><bold>☠ ЭВОЛЮЦИЯ КРОВАВОЙ ЛУНЫ ☠</bold></dark_red>"
+    title: "<dark_red><bold>НЕ ВЫХОДИТЕ!</bold></dark_red>"
     # Подзаголовок на экран
-    subtitle: "<red><bold>При выходе с сервера после начала кровавой луны вы умрёте!</bold></red>"
+    subtitle: "<red>Выход из игры сейчас = смерть</red>"
     # Тайминги анимации титула в тиках (20 тиков = 1 сек)
     title-times:
       fade-in: 10
@@ -522,8 +522,8 @@ quit-penalty:
     # Предупреждение в чат игроку при входе на сервер во время опасного периода
     join-warning: "<gradient:#ff0000:#770000><bold>☠ ВНИМАНИЕ:</bold></gradient> <red>Идёт Кровавая Луна! Выход с сервера в течение {remaining}с приведёт к немедленной смерти!</red>"
     # Экранный титул при входе
-    join-title: "<dark_red><bold>☠ КРОВАВАЯ ЛУНА АКТИВНА ☠</bold></dark_red>"
-    join-subtitle: "<red><bold>Не выходите! До окончания блокировки: {remaining}с</bold></red>"
+    join-title: "<dark_red><bold>ЛУНА АКТИВНА</bold></dark_red>"
+    join-subtitle: "<red>Не выходите ещё {remaining} с</red>"
   # Действия при выходе из игры:
   on-quit:
     # Убивать игрока при выходе

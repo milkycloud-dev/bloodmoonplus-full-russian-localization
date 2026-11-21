@@ -13,7 +13,7 @@ dying-results-xp-loss: "<dark_red><bold>Смерть во время Крова�
 
 # ==================== Событие ====================
 event:
-  title: "<dark_red><bold>🌙 КРОВАВАЯ ЛУНА"
+  title: "<dark_red><bold>КРОВАВАЯ ЛУНА"
   subtitle: "<red>Выживите до рассвета <gray>(x{difficulty})"
   subtitle-clean: "<red>Выживите до рассвета..."
   start: "<red>Кровавая Луна началась! <gray>Сложность <red>x{difficulty}<gray> · Длительность <white>{minutes} мин"
@@ -45,7 +45,7 @@ event:
 schedule:
   warning: "<yellow>Кровавая Луна начнется через <red>{min} мин.<yellow> Приготовьтесь!"
   warning-params: "<yellow>Кровавая Луна начнется через <red>{min} мин. <gray>(x{difficulty})<yellow>. Приготовьтесь!"
-  warning-title: "<dark_red><bold>Кровавая Луна приближается!"
+  warning-title: "<dark_red><bold>Луна восходит!"
   warning-body: "<red>Опыт умножен, а с мобов выпадает бонусный лут.
 <red>Мобы усилены и накладывают особые эффекты."
 

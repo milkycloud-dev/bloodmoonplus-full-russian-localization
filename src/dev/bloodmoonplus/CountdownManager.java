@@ -110,9 +110,9 @@ public final class CountdownManager {
          "countdown.chat-with-params",
          "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! <gray>(Сложность <red>x{difficulty}</red> · Длительность <white>{duration} мин</white>)</gray></red>"
       );
-      this.titleMsg = cfg.getString("countdown.title", "<dark_red><bold>КРОВАВАЯ ЛУНА ПРИБЛИЖАЕТСЯ</bold></dark_red>");
+      this.titleMsg = cfg.getString("countdown.title", "<dark_red><bold>КРОВАВАЯ ЛУНА</bold></dark_red>");
       this.subtitleMsg = cfg.getString("countdown.subtitle", "<red>Начало через {time}...</red>");
-      this.subtitleWithParamsMsg = cfg.getString("countdown.subtitle-with-params", "<red>Начало через {time}... <gray>(Сложность x{difficulty})</gray></red>");
+      this.subtitleWithParamsMsg = cfg.getString("countdown.subtitle-with-params", "<red>Начало через {time} <gray>(x{difficulty})</gray></red>");
 
       // 1. Normal
       this.normalChat = cfg.getString(
@@ -131,8 +131,8 @@ public final class CountdownManager {
          "warning-types.dangerous.chat",
          "<gradient:#ff0055:#990022><bold>☠ ЗЛОВЕЩЕЕ ПРЕДЗНАМЕНОВАНИЕ:</bold></gradient> <red>Воздух наполняется запахом пепла и серы... Приближается <bold><dark_red>ОПАСНАЯ Кровавая Луна</dark_red></bold> через <yellow>{time}</yellow>! Полчища древних тварей жаждут крови!</red>"
       );
-      this.dangerTitle = cfg.getString("warning-types.dangerous.title", "<gradient:#ff0033:#770011><bold>☠ ОПАСНАЯ КРОВАВАЯ ЛУНА ☠</bold></gradient>");
-      this.dangerSubtitle = cfg.getString("warning-types.dangerous.subtitle", "<red>Приближается через <yellow>{time}</yellow>! Спасайтесь!</red>");
+      this.dangerTitle = cfg.getString("warning-types.dangerous.title", "<gradient:#ff0033:#770011><bold>ОПАСНАЯ ЛУНА</bold></gradient>");
+      this.dangerSubtitle = cfg.getString("warning-types.dangerous.subtitle", "<red>Через <yellow>{time}</yellow>! Спасайтесь!</red>");
       this.dangerSound = cfg.getString("warning-types.dangerous.sound", "entity.ender_dragon.growl");
       this.dangerVolume = (float)cfg.getDouble("warning-types.dangerous.volume", 1.0);
       this.dangerPitch = (float)cfg.getDouble("warning-types.dangerous.pitch", 0.9);
@@ -143,8 +143,8 @@ public final class CountdownManager {
          "warning-types.lethal.chat",
          "<gradient:#880000:#ff0000><bold>⚡ СМЕРТОНОСНЫЙ РОК:</bold></gradient> <red><bold>Земля содрогается, а небеса плачут кровью...</bold> Через <yellow>{time}</yellow> взойдет <gradient:#ff0000:#330000><bold>СМЕРТЕЛЬНАЯ Кровавая Луна</bold></gradient>! Шансов выжить почти нет. Никакой пощады не будет!</red>"
       );
-      this.lethalTitle = cfg.getString("warning-types.lethal.title", "<gradient:#330000:#ff0000><bold>☠ СМЕРТЕЛЬНАЯ ЛУНА ☠</bold></gradient>");
-      this.lethalSubtitle = cfg.getString("warning-types.lethal.subtitle", "<dark_red><bold>Через {time}! Никто не покинет эту ночь живым!</bold></dark_red>");
+      this.lethalTitle = cfg.getString("warning-types.lethal.title", "<gradient:#330000:#ff0000><bold>ЛУНА СМЕРТИ</bold></gradient>");
+      this.lethalSubtitle = cfg.getString("warning-types.lethal.subtitle", "<dark_red>Через {time}. Живым не уйдёт никто</dark_red>");
       this.lethalSound = cfg.getString("warning-types.lethal.sound", "entity.wither.spawn");
       this.lethalVolume = (float)cfg.getDouble("warning-types.lethal.volume", 1.0);
       this.lethalPitch = (float)cfg.getDouble("warning-types.lethal.pitch", 0.6);

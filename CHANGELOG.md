@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.12 (2026-11-21)
+
+- Full-screen titles and subtitles shortened so they fit the screen at GUI scale 4 on 1920x1080 (title up to 15 bold characters, subtitle up to about 35 regular): quit warning, join warning, countdown, dangerous and lethal warnings, black and purple moon, moon start, mythic drop. Bold removed from subtitles, emoji removed from titles.
+- Same texts updated in `config.yml`, locales, `messages.yml` and the built-in defaults.
+
 ## 1.0.11 (2026-11-21)
 
 - Dynamic difficulty is uncapped by default: `dynamic-difficulty.max-difficulty: 0` means no limit, any positive value sets a cap. Mob stats stay bounded by `difficulty.max-health-cap`, `speed-cap` and `max-horde-size-multiplier`.
