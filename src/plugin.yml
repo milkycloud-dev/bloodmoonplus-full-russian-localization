@@ -1,5 +1,5 @@
 name: BloodMoonPlus
-version: '1.0.9'
+version: '1.0.10'
 main: dev.bloodmoonplus.BloodMoonPlus
 api-version: '26.2'
 load: POSTWORLD

@@ -1,10 +1,14 @@
-## 1.0.8 (2026-11-20), localization fixes
+# Changelog
 
+## 1.0.10 (2026-11-21)
+
+- Elytra wrath damage escalates: each consecutive lightning strike deals `damage-multiplier` (default 1.5) times the previous one, capped at `max-damage` (40). The streak survives landing, healing and relogging and resets only after `streak-reset-seconds` (60) without a strike, on death or when the moon ends.
+- One-time chat warning once the next strike would deal `warn-damage` (8) or more, showing its damage in hearts.
+- New container wrath: chests, trapped chests, barrels, ender chests, shulker boxes and chest/hopper minecarts cannot be opened in a world with an active moon. The first attempt only warns; later attempts summon the `wither_sombra` boss next to the container, at most once per player every `punish-cooldown-seconds` (180). Ops, creative/spectator and `bloodmoon.bypass.containerwrath` are exempt; containers already denied by protection plugins are ignored.
+- New `container-wrath` section and new `elytra-wrath` keys in `config.yml`; missing keys fall back to the defaults above.
 - Restored the ability summary line and the `Владелец: {owner}` line in the lore of 23 items.
 - `plugin.yml` descriptions and the world template survivor message are now Russian.
 - Root and `src` copies of `items.yml`, `loot.yml` and `messages.yml` match the files deployed on the server.
-
-# Changelog
 
 ## 1.0.9 (2026-11-20)
 

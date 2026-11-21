@@ -32,6 +32,7 @@ public final class BloodMoonPlus extends JavaPlugin {
    private SpectatorBlockManager spectatorBlock;
    private DimensionWrathManager dimensionWrath;
    private ElytraWrathManager elytraWrath;
+   private ContainerWrathManager containerWrath;
    private LightningEffectManager lightning;
    private DynamicDifficultyManager dynamicDifficulty;
    private WitherControlManager witherControl;
@@ -69,6 +70,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       this.spectatorBlock = new SpectatorBlockManager(this);
       this.dimensionWrath = new DimensionWrathManager(this);
       this.elytraWrath = new ElytraWrathManager(this);
+      this.containerWrath = new ContainerWrathManager(this);
       this.lightning = new LightningEffectManager(this);
       this.dynamicDifficulty = new DynamicDifficultyManager(this);
       this.witherControl = new WitherControlManager(this);
@@ -95,6 +97,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       Bukkit.getPluginManager().registerEvents(this.spectatorBlock, this);
       Bukkit.getPluginManager().registerEvents(this.dimensionWrath, this);
       Bukkit.getPluginManager().registerEvents(this.elytraWrath, this);
+      Bukkit.getPluginManager().registerEvents(this.containerWrath, this);
       Bukkit.getPluginManager().registerEvents(this.lightning, this);
       Bukkit.getPluginManager().registerEvents(this.dynamicDifficulty, this);
       if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -171,6 +174,9 @@ public final class BloodMoonPlus extends JavaPlugin {
       }
       if (this.elytraWrath != null) {
          this.elytraWrath.reload();
+      }
+      if (this.containerWrath != null) {
+         this.containerWrath.reload();
       }
       if (this.dynamicDifficulty != null) {
          this.dynamicDifficulty.reload();
